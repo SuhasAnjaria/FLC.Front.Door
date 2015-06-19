@@ -1,0 +1,18 @@
+﻿<extra:ElysiumApplication x:Class="flc.FrontDoor.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:extra="http://schemas.extra.com/ui"
+             xmlns:params="http://schemas.codeplex.com/elysium/params"
+             xmlns:metro="http://schemas.codeplex.com/elysium"      
+          
+             StartupUri="\Views\LoginView.xaml"
+                          Theme="Light"
+                          AccentColor="#3F51B5"
+                          ContrastColor="#FAFAFA"
+                          SemitransparentContrastColor="#ECEFF1"
+                          
+                          >
+    <Application.Resources>
+         
+    </Application.Resources>
+</extra:ElysiumApplication>

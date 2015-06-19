@@ -1,0 +1,77 @@
+﻿<extra:Window x:Class="flc.FrontDoor.Views.LoginView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:extra="http://schemas.extra.com/ui"
+        xmlns:params="http://schemas.codeplex.com/elysium/params"
+        xmlns:metro="http://schemas.codeplex.com/elysium"
+              Background="#EFEBE9" WindowStartupLocation="CenterScreen"
+        Title="Frontlight Capital Login" Height="350" Width="425"
+    Style="{StaticResource AccentTitleBarWindowStyle}"
+              >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3.5*"></RowDefinition>
+            <RowDefinition Height=" 2*"></RowDefinition>
+            <RowDefinition Height=" 2*"></RowDefinition>
+            <RowDefinition Height=" 2*"></RowDefinition>
+            <RowDefinition Height=" 1*"></RowDefinition>
+            <RowDefinition Height=" 1*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="28*"></ColumnDefinition>
+            <ColumnDefinition Width="107*"></ColumnDefinition>
+            <ColumnDefinition Width="150*"></ColumnDefinition>
+            <ColumnDefinition Width="132*"></ColumnDefinition>
+
+        </Grid.ColumnDefinitions>
+
+        <extra:LoadingContent Grid.Column="1" Grid.ColumnSpan="3"  Header="" Margin="40,10,61,0" IsContentLoaded='{Binding IsBusy, Mode=TwoWay, NotifyOnTargetUpdated=True}'  >
+            <extra:Icon Style="{StaticResource Windows8LoginIconStyle}" Size="Large"/>
+        </extra:LoadingContent>
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <Label Content="" Margin="1,1,2,1"/>
+
+            <TextBlock Text="Username:" TextAlignment="Right" 
+             Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Bottom,Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}"
+             Style="{StaticResource NormalTextStyle}"           >
+            </TextBlock>
+
+
+
+
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="1">
+            <TextBlock Text=""
+                       Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Bottom,Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}">
+
+            </TextBlock>
+
+            <TextBlock Text="Password:" TextAlignment="Right"
+                       Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Bottom,Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}"
+                       Style="{StaticResource NormalTextStyle}">
+            </TextBlock>
+
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="2">
+            <TextBlock Text=""></TextBlock>
+            <TextBox  TextAlignment="Center"  Text="{Binding Username}"
+                      Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}" ></TextBox>
+
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="2">
+            <TextBlock Text=""></TextBlock>
+            <PasswordBox   Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}"
+                           BorderThickness="1,1,1,1" x:Name="PasswordBox" 
+                       extra:KeyCommand.Command="{Binding LoginCommand}"
+                           extra:KeyCommand.CommandParameter="{Binding Path=Text, RelativeSource={RelativeSource Self}}"
+                           extra:KeyCommand.Key="Enter"
+                          HorizontalContentAlignment="Center" />
+
+
+
+
+
+
+        </StackPanel>
+    </Grid>
+</extra:Window>

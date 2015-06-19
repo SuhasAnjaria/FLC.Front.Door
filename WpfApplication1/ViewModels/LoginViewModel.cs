@@ -1,0 +1,132 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Windows.Media;
+using System.Threading.Tasks;
+using Framework.UI.Controls;
+using Framework.UI.Input;
+using System.ComponentModel;
+using Framework.ComponentModel;
+using Framework.ComponentModel.Rules;
+using flc.FrontDoor.Models;
+using flc.FrontDoor.Assets;
+using System.Windows.Controls;
+using System.Security;
+
+namespace flc.FrontDoor.ViewModels
+{
+    class LoginViewModel : NotifyDataErrorInfo<LoginViewModel>
+    {
+        #region PrivateMembers
+        private string _username;
+        private PasswordBox _pass;
+        private bool _isbusy = true;
+        private IAuthenticate<CustomID> _loginAuthenticate;
+        private CustomID _currentuser;
+        #endregion
+
+
+       
+  
+
+
+        #region Ctor
+        public LoginViewModel(IAuthenticate<CustomID> loginAuthenticate, object pass)
+        {
+
+            _loginAuthenticate = loginAuthenticate;
+
+            Pass = pass as PasswordBox;
+            this.loginCommand = new DelegateCommand<string>(this.Login);
+
+        }
+        #endregion
+
+        #region Properties
+        public string Username
+        {
+
+            set
+            {
+                this.SetProperty(ref this._username, value);
+            }
+            get
+            {
+                return this._username;
+            }
+        }
+
+        public bool IsBusy
+        {
+            get { return this._isbusy; }
+            set
+            {
+
+                this.SetProperty(ref this._isbusy, value);
+            }
+        }
+
+        private PasswordBox Pass
+        {
+            get { return this._pass; }
+            set { _pass = value; }
+        } 
+        #endregion
+
+
+
+
+        #region Model Methods
+        private void Login(string message)
+        {
+            this.IsBusy = false;
+            try
+            {
+                _currentuser = _loginAuthenticate.AuthenticateMe(this._username, this._pass.Password);
+                Principal MyUser = Thread.CurrentPrincipal as Principal;
+                MyUser.ID = new CustomID(_currentuser.EmployeeID, _currentuser.Name, _currentuser.Email, _currentuser.Roles);
+
+                if (!string.IsNullOrEmpty(_currentuser.Name))
+                {
+                    MessageDialog.ShowAsync("Welcome", _currentuser.Name);
+                }
+                Username = String.Empty;
+                Pass.Password = String.Empty;
+
+
+
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                MessageDialog.ShowAsync("Error", ex.Message);
+
+            }
+
+        } 
+        #endregion
+
+    
+
+
+
+
+        #region Delegate Commands and Validation Rules
+        private DelegateCommand<string> loginCommand;
+        public DelegateCommand<string> LoginCommand
+        {
+            get { return this.loginCommand; }
+
+        }
+        static LoginViewModel()
+        {
+            Rules.Add(new DelegateRule<LoginViewModel>("Username", "Username cannot be empty", x => !string.IsNullOrWhiteSpace(x.Username)));
+            Rules.Add(new DelegateRule<LoginViewModel>("Password", "Password cannot be empty", x => !string.IsNullOrWhiteSpace(x.Pass.Password)));
+        }
+        
+        #endregion
+
+
+    }
+}
