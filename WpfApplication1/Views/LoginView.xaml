@@ -7,7 +7,7 @@
               Background="#EFEBE9" WindowStartupLocation="CenterScreen"
         Title="Frontlight Capital Login" Height="350" Width="425"
     Style="{StaticResource AccentTitleBarWindowStyle}"
-              >
+             >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="3.5*"></RowDefinition>
