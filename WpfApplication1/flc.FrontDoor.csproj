@@ -120,7 +120,9 @@
     <Compile Include="Common\Interface1.cs" />
     <Compile Include="Data\Datatypes.cs" />
     <Compile Include="Data\Instrument Definition.cs" />
-    <Compile Include="Data\Instrument.cs" />
+    <Compile Include="Data\Instrument.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="Views\FrontDoor.xaml.cs">

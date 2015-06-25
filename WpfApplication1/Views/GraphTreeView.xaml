@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="flc.FrontDoor.Views.GraphTreeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:extra="http://schemas.extra.com/ui"
+        xmlns:params="http://schemas.codeplex.com/elysium/params"
+        xmlns:metro="http://schemas.codeplex.com/elysium"
+             xmlns:xy="clr-namespace:flc.FrontDoor.Data"
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="400">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            
+        </Grid.ColumnDefinitions>
+        <TreeView x:Name="MyTree" ItemsSource="{Binding Currency}" > <!--Currency is IEnumerable<CurrencyViewModel>-->
+
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type xy:CurrencyViewModel}" ItemsSource="{Binding AssetTypes }" >
+                    
+                   <TextBlock Text="{Binding MyCurrency}"/>
+                </HierarchicalDataTemplate>
+                
+                <HierarchicalDataTemplate DataType="{x:Type xy:AssetTypeViewModel}" ItemsSource="{Binding ProductType}">
+                    
+                    <TextBlock Text="{Binding MyAssetType}"/>
+                    
+                </HierarchicalDataTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type xy:ProductTypeViewModel}" ItemsSource="{Binding Products}">
+                    <TextBlock Text="{Binding MyProductType}"/>
+                   
+                </HierarchicalDataTemplate>
+               
+                <HierarchicalDataTemplate DataType="{x:Type xy:Product}" ItemsSource="{Binding Products}">
+                    <TextBlock Text="{Binding Name}"/>
+                </HierarchicalDataTemplate>
+                    
+         
+
+            </TreeView.Resources>
+
+
+        </TreeView>
+        
+       
+
+
+                
+        
+    </Grid>
+</UserControl>
