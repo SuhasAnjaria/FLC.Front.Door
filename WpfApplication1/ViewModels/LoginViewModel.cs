@@ -15,9 +15,10 @@ using flc.FrontDoor.Assets;
 using System.Windows.Controls;
 using System.Security;
 
+
 namespace flc.FrontDoor.ViewModels
 {
-    class LoginViewModel : NotifyDataErrorInfo<LoginViewModel>
+    class LoginViewModel : BaseViewModel
     {
         #region PrivateMembers
         private string _username;
@@ -48,30 +49,20 @@ namespace flc.FrontDoor.ViewModels
         public string Username
         {
 
-            set
-            {
-                this.SetProperty(ref this._username, value);
-            }
-            get
-            {
-                return this._username;
-            }
+            set { this.SetProperty(ref this._username, value); }
+            get { return this._username; }
         }
 
         public bool IsBusy
         {
             get { return this._isbusy; }
-            set
-            {
-
-                this.SetProperty(ref this._isbusy, value);
-            }
+            set { this.SetProperty(ref this._isbusy, value); }
         }
 
         private PasswordBox Pass
         {
             get { return this._pass; }
-            set { _pass = value; }
+            set { this.SetProperty(ref this._pass, value); }
         } 
         #endregion
 
@@ -82,6 +73,7 @@ namespace flc.FrontDoor.ViewModels
         private void Login(string message)
         {
             this.IsBusy = false;
+            
             try
             {
                 _currentuser = _loginAuthenticate.AuthenticateMe(this._username, this._pass.Password);
@@ -90,6 +82,7 @@ namespace flc.FrontDoor.ViewModels
 
                 if (!string.IsNullOrEmpty(_currentuser.Name))
                 {
+                 
                     MessageDialog.ShowAsync("Welcome", _currentuser.Name);
                 }
                 Username = String.Empty;
@@ -116,13 +109,29 @@ namespace flc.FrontDoor.ViewModels
         private DelegateCommand<string> loginCommand;
         public DelegateCommand<string> LoginCommand
         {
-            get { return this.loginCommand; }
+            get 
+            {
+                return this.loginCommand;      
+            }
 
         }
         static LoginViewModel()
         {
-            Rules.Add(new DelegateRule<LoginViewModel>("Username", "Username cannot be empty", x => !string.IsNullOrWhiteSpace(x.Username)));
-            Rules.Add(new DelegateRule<LoginViewModel>("Password", "Password cannot be empty", x => !string.IsNullOrWhiteSpace(x.Pass.Password)));
+            Rules.Add(new DelegateRule<BaseViewModel>("Username", "Username cannot be empty", x =>
+            {
+               /*<interaction logic> 
+                Casting Base class to derived class and implementing validation rule
+                </interaction logic>*/
+               var cast =  (LoginViewModel)x; return !string.IsNullOrWhiteSpace(cast.Username);
+            }));
+
+            Rules.Add(new DelegateRule<BaseViewModel>("Password", "Password cannot be empty", x =>
+                 {
+                     /*<interaction logic> 
+                      Casting Base class to derived class and implementing validation rule
+                      </interaction logic>*/
+                     var cast = (LoginViewModel)x; return !string.IsNullOrWhiteSpace(cast.Pass.Password);
+                 }));
         }
         
         #endregion

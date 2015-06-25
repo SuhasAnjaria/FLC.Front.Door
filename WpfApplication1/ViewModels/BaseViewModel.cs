@@ -1,19 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Framework.UI.Controls;
-using Framework.UI.Input;
-using System.ComponentModel;
+using DevExpress.Mvvm.DataAnnotations;
+using DevExpress.Mvvm.POCO;
+using DevExpress.Mvvm;
 using Framework.ComponentModel;
-using Framework.ComponentModel.Rules;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.ComponentModel;
 
 namespace flc.FrontDoor.ViewModels
 {
-   
-    class BaseViewModel 
+
+ 
+
+
+    public abstract class BaseViewModel : NotifyDataErrorInfo<BaseViewModel>
     {
-        
-}
+       
+
+       
+
+    }
+
+    public abstract class MainViewModel 
+    {
+       
+    }
+
+    
 }

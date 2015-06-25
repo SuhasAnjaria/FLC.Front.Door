@@ -12,17 +12,37 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using flc.FrontDoor.Data;
+using System.Collections;
 
 namespace flc.FrontDoor.Views
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for GraphTreeView.xaml
     /// </summary>
-    public partial class FrontDoor : UserControl
+    public partial class GraphTreeView : UserControl
     {
-        public FrontDoor()
+        public GraphTreeView()
         {
             InitializeComponent();
-        }
+
+            
+            MyTree.DataContext = new HierarchyViewModel();
+         }
+
+        
+      
     }
+
+
+   
+
+  
+   
+
+
+
+
+
 }
+

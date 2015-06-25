@@ -4,7 +4,7 @@
         xmlns:extra="http://schemas.extra.com/ui"
         xmlns:params="http://schemas.codeplex.com/elysium/params"
         xmlns:metro="http://schemas.codeplex.com/elysium"
-              Background="#EFEBE9" WindowStartupLocation="CenterScreen"
+               WindowStartupLocation="CenterScreen"
         Title="Frontlight Capital Login" Height="350" Width="425"
     Style="{StaticResource AccentTitleBarWindowStyle}"
              >
@@ -25,15 +25,23 @@
 
         </Grid.ColumnDefinitions>
 
-        <extra:LoadingContent Grid.Column="1" Grid.ColumnSpan="3"  Header="" Margin="40,10,61,0" IsContentLoaded='{Binding IsBusy, Mode=TwoWay, NotifyOnTargetUpdated=True}'  >
+        <extra:LoadingContent 
+            Grid.Column="1" 
+            Grid.ColumnSpan="3" 
+            Header="" 
+            Margin="40,10,61,0" 
+            IsContentLoaded='{Binding IsBusy, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}'>
             <extra:Icon Style="{StaticResource Windows8LoginIconStyle}" Size="Large"/>
         </extra:LoadingContent>
+        
         <StackPanel Grid.Row="1" Grid.Column="1">
             <Label Content="" Margin="1,1,2,1"/>
 
-            <TextBlock Text="Username:" TextAlignment="Right" 
-             Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Bottom,Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}"
-             Style="{StaticResource NormalTextStyle}"           >
+            <TextBlock 
+                Text="Username:" 
+                TextAlignment="Right" 
+                Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Bottom,Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}" 
+                Style="{StaticResource NormalTextStyle}">
             </TextBlock>
 
 
@@ -41,36 +49,42 @@
 
         </StackPanel>
         <StackPanel Grid.Row="2" Grid.Column="1">
-            <TextBlock Text=""
-                       Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Bottom,Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}">
+            <TextBlock 
+                Text="" 
+                Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Bottom,Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}">
 
             </TextBlock>
 
-            <TextBlock Text="Password:" TextAlignment="Right"
-                       Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Bottom,Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}"
-                       Style="{StaticResource NormalTextStyle}">
+            <TextBlock 
+                Text="Password:" 
+                TextAlignment="Right" 
+                Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Bottom,Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}" 
+                Style="{StaticResource NormalTextStyle}">
             </TextBlock>
 
         </StackPanel>
         <StackPanel Grid.Row="1" Grid.Column="2">
             <TextBlock Text=""></TextBlock>
-            <TextBox  TextAlignment="Center"  Text="{Binding Username}"
-                      Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}" ></TextBox>
+            <TextBox 
+                TextAlignment="Center" 
+                Text="{Binding Username, ValidatesOnDataErrors=True,  UpdateSourceTrigger=PropertyChanged}" 
+                Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}">
+                
+            </TextBox>
 
         </StackPanel>
         <StackPanel Grid.Row="2" Grid.Column="2">
             <TextBlock Text=""></TextBlock>
-            <PasswordBox   Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}"
-                           BorderThickness="1,1,1,1" x:Name="PasswordBox" 
-                       extra:KeyCommand.Command="{Binding LoginCommand}"
-                           extra:KeyCommand.CommandParameter="{Binding Path=Text, RelativeSource={RelativeSource Self}}"
-                           extra:KeyCommand.Key="Enter"
-                          HorizontalContentAlignment="Center" />
-
-
-
-
-
+            <PasswordBox 
+                Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}" 
+                BorderThickness="1,1,1,1" 
+                x:Name="PasswordBox" 
+                extra:KeyCommand.Command="{Binding LoginCommand}" 
+                extra:KeyCommand.CommandParameter="{Binding Path=Text, RelativeSource={RelativeSource Self}}" 
+                extra:KeyCommand.Key="Enter" 
+                HorizontalContentAlignment="Center">
+                
+            </PasswordBox>
 
         </StackPanel>
     </Grid>

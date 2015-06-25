@@ -3,16 +3,46 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:extra="http://schemas.extra.com/ui"
              xmlns:params="http://schemas.codeplex.com/elysium/params"
-             xmlns:metro="http://schemas.codeplex.com/elysium"      
+             xmlns:metro="http://schemas.codeplex.com/elysium"
+             StartupUri="\Views\GraphTreeView.xaml" Theme="Light">             
           
-             StartupUri="\Views\LoginView.xaml"
-                          Theme="Light"
-                          AccentColor="#3F51B5"
-                          ContrastColor="#FAFAFA"
-                          SemitransparentContrastColor="#ECEFF1"
+        <!--   StartupUri="\Views\LoginView.xaml"
+                          Theme="Light"-->
                           
-                          >
+                          
+                          
     <Application.Resources>
-         
+        <Style x:Key="{x:Static SystemParameters.FocusVisualStyleKey}" TargetType="{x:Type PasswordBox}">
+            <Setter Property="Background" Value="{StaticResource TransparentBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+            <Setter Property="BorderThickness" Value="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldThickness), Mode=OneWay}" />
+            <Setter Property="Margin" Value="-2"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type PasswordBox}">
+                        <extra:BorderFix Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
+                            <extra:BorderFix.Triggers>
+                                <EventTrigger RoutedEvent="Border.Loaded">
+                                    <BeginStoryboard>
+                                        <Storyboard AutoReverse="True"
+                                                Duration="00:00:01" 
+                                                RepeatBehavior="Forever">
+                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.Opacity)" 
+                                                         To="0"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </extra:BorderFix.Triggers>
+                        </extra:BorderFix>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        
     </Application.Resources>
 </extra:ElysiumApplication>
