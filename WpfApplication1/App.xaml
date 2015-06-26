@@ -4,6 +4,7 @@
              xmlns:extra="http://schemas.extra.com/ui"
              xmlns:params="http://schemas.codeplex.com/elysium/params"
              xmlns:metro="http://schemas.codeplex.com/elysium"
+                         
              StartupUri="\Views\GraphTreeView.xaml" Theme="Light">             
           
         <!--   StartupUri="\Views\LoginView.xaml"
@@ -42,6 +43,47 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="MyGraphTreeViewStyle" BasedOn="{StaticResource {x:Type TreeView}}" TargetType="{x:Type TreeView}">
+            <Setter Property="Background" Value="{StaticResource TransparentBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TransparentBrush}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FocusVisualStyle" Value="{StaticResource {x:Static SystemParameters.FocusVisualStyleKey}}"/>
+            <Setter Property="Foreground" Value="{StaticResource ContrastBrush}"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource MyGraphTreeViewStyle}"/>
+            <Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TreeView}">
+                        <extra:BorderFix x:Name="Bd" 
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Padding="{TemplateBinding Padding}">
+                            <ScrollViewer x:Name="ScrollViewer" 
+                                          CanContentScroll="False" 
+                                          Focusable="false" 
+                                          HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" 
+                                          Padding="{TemplateBinding Padding}" 
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
+                                <ItemsPresenter/>
+                            </ScrollViewer>
+                        </extra:BorderFix>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        
         
         
     </Application.Resources>

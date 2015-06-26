@@ -20,6 +20,9 @@ namespace flc.FrontDoor.ViewModels
 {
     class LoginViewModel : BaseViewModel
     {
+
+
+
         #region PrivateMembers
         private string _username;
         private PasswordBox _pass;
@@ -27,11 +30,6 @@ namespace flc.FrontDoor.ViewModels
         private IAuthenticate<CustomID> _loginAuthenticate;
         private CustomID _currentuser;
         #endregion
-
-
-       
-  
-
 
         #region Ctor
         public LoginViewModel(IAuthenticate<CustomID> loginAuthenticate, object pass)
@@ -66,9 +64,6 @@ namespace flc.FrontDoor.ViewModels
         } 
         #endregion
 
-
-
-
         #region Model Methods
         private void Login(string message)
         {
@@ -99,11 +94,6 @@ namespace flc.FrontDoor.ViewModels
 
         } 
         #endregion
-
-    
-
-
-
 
         #region Delegate Commands and Validation Rules
         private DelegateCommand<string> loginCommand;
@@ -136,6 +126,7 @@ namespace flc.FrontDoor.ViewModels
         
         #endregion
 
-
+        
+        }
     }
 }

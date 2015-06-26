@@ -6,7 +6,8 @@ using Framework.ComponentModel;
 using Framework.UI.Input;
 using Framework.IO;
 using flc.FrontDoor.ViewModels;
-
+ using System.Windows.Data;
+using System.Windows.Documents;
 
 namespace flc.FrontDoor.Data
 {
@@ -16,6 +17,11 @@ namespace flc.FrontDoor.Data
         public string AssetType;
         public string ProductType;
         public string Currency;
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
 
@@ -24,7 +30,7 @@ namespace flc.FrontDoor.Data
 
     class HierarchyViewModel : BaseViewModel
     {
-        public static List<Product> Products = new List<Product>{
+        public static List<Product> Product1 = new List<Product>{
                 new Product{Name = "OIS Swap", AssetType ="Rates",ProductType="Swap",Currency="USD"},
                 new Product{Name = "Libor Swap", AssetType ="Rates",ProductType="Swap",Currency="USD"},
                 new Product{Name = "Libor Swaption", AssetType ="Rates",ProductType="Swaption",Currency="USD"},
@@ -39,7 +45,7 @@ namespace flc.FrontDoor.Data
         public IEnumerable<CurrencyViewModel> Currency { get; set; }
         public HierarchyViewModel()
         {
-            Currency = Products
+            Currency = Product1
                 .OrderBy(prod => prod.Currency)
                 .GroupBy(prod => prod.Currency)
                 .OrderBy(group => group.Key)
@@ -113,15 +119,18 @@ namespace flc.FrontDoor.Data
     class ProductTypeViewModel : BaseViewModel
     {
       
-    private string producttype;
-    public IEnumerable<Product> Products;
+        private  IEnumerable<Product> _products;
+        private string producttype;
+  
+
 
     public ProductTypeViewModel(string producttype, IEnumerable<Product> ProductSorted)
         {
             MyProductType = producttype;
-            Products = ProductSorted
+            _products = ProductSorted
                 .OrderBy(prod => prod.ProductType)
                 .Select(prod => prod).ToArray();
+           
         }
 
 
@@ -131,9 +140,34 @@ namespace flc.FrontDoor.Data
             get { return this.producttype; }
             set { this.SetProperty(ref this.producttype, value); }
 
-        }	
+        }
+
+
+        public  IEnumerable<Product> Products
+        {
+            get { return _products; }
+            set { this.SetProperty(ref this._products , value); }
+        }
     		
     }
 
+   
+
+    class ProducttoNameConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            var Name = (Product)value;
+            return Name.Name;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+  
+    
 }
     #endregion

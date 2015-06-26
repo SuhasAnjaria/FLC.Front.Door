@@ -28,6 +28,7 @@ namespace flc.FrontDoor.Views
 
             
             MyTree.DataContext = new HierarchyViewModel();
+           
          }
 
         

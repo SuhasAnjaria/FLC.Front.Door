@@ -9,15 +9,27 @@
              xmlns:xy="clr-namespace:flc.FrontDoor.Data"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="400">
+    <UserControl.Resources>
+        <xy:ProducttoNameConverter x:Key="ProductToNameConverter"/>
+        <ItemContainerTemplate x:Key="LastLegConverter">          
+            
+            <TextBlock Text="{Binding}"/>
 
+        </ItemContainerTemplate>
+
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <TreeView x:Name="MyTree" ItemsSource="{Binding Currency}" > <!--Currency is IEnumerable<CurrencyViewModel>-->
+        <TreeView   x:Name="MyTree"  ItemsSource="{Binding Currency}" 
+            Style="{StaticResource GraphTreeViewStyle}">
+
 
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type xy:CurrencyViewModel}" ItemsSource="{Binding AssetTypes }" >
@@ -30,26 +42,21 @@
                     <TextBlock Text="{Binding MyAssetType}"/>
                     
                 </HierarchicalDataTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type xy:ProductTypeViewModel}" ItemsSource="{Binding Products}">
+                <HierarchicalDataTemplate DataType="{x:Type xy:ProductTypeViewModel}" ItemTemplate="{StaticResource LastLegConverter}" ItemsSource="{Binding Products}">
                     <TextBlock Text="{Binding MyProductType}"/>
                    
+                  
                 </HierarchicalDataTemplate>
-               
-                <HierarchicalDataTemplate DataType="{x:Type xy:Product}" ItemsSource="{Binding Products}">
-                    <TextBlock Text="{Binding Name}"/>
-                </HierarchicalDataTemplate>
-                    
-         
 
-            </TreeView.Resources>
+                </TreeView.Resources>
 
 
         </TreeView>
-        
-       
+        <TextBlock x:Name="ABC" Grid.Column="1" Width="200" Height="140" Text="{Binding ElementName=MyTree, Path=SelectedValue, NotifyOnSourceUpdated=True}" TextWrapping="Wrap"/>
+        <TextBlock Grid.Column="1" Width="100" Text="{Binding ElementName=ABC, Path=Text}"/>    
 
 
-                
-        
+
+
     </Grid>
 </UserControl>
