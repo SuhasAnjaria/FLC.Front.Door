@@ -1,62 +1,85 @@
-﻿<UserControl x:Class="flc.FrontDoor.Views.GraphTreeView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:extra="http://schemas.extra.com/ui"
-        xmlns:params="http://schemas.codeplex.com/elysium/params"
-        xmlns:metro="http://schemas.codeplex.com/elysium"
-             xmlns:xy="clr-namespace:flc.FrontDoor.Data"
-             mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="400">
+﻿<UserControl 
+    x:Class="flc.FrontDoor.Views.GraphTreeView" 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:extra="http://schemas.extra.com/ui" 
+    xmlns:params="http://schemas.codeplex.com/elysium/params" 
+    xmlns:metro="http://schemas.codeplex.com/elysium" 
+    xmlns:xy="clr-namespace:flc.FrontDoor.Data" 
+    mc:Ignorable="d" 
+    Height="300" 
+    Width="250">
     <UserControl.Resources>
         <xy:ProducttoNameConverter x:Key="ProductToNameConverter"/>
-        <ItemContainerTemplate x:Key="LastLegConverter">          
-            
-            <TextBlock Text="{Binding}"/>
+        <ItemContainerTemplate x:Key="LastLegConverter" >
+
+            <Button 
+                Focusable="False" 
+                
+                x:Name="SelectionButon" 
+                 
+                Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}" 
+                Content="{Binding}" 
+                Click="_AttachSecurity"/>
 
         </ItemContainerTemplate>
 
     </UserControl.Resources>
-    
+
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.5*"/>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
-        <TreeView   x:Name="MyTree"  ItemsSource="{Binding Currency}" 
-            Style="{StaticResource GraphTreeViewStyle}">
+        
+
+        <TreeView 
+            x:Name="MyTree" 
+            Width="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Width}" 
+            ItemsSource="{Binding Currency}">
 
 
-            <TreeView.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type xy:CurrencyViewModel}" ItemsSource="{Binding AssetTypes }" >
-                    
-                   <TextBlock Text="{Binding MyCurrency}"/>
-                </HierarchicalDataTemplate>
-                
-                <HierarchicalDataTemplate DataType="{x:Type xy:AssetTypeViewModel}" ItemsSource="{Binding ProductType}">
-                    
-                    <TextBlock Text="{Binding MyAssetType}"/>
-                    
-                </HierarchicalDataTemplate>
-                <HierarchicalDataTemplate DataType="{x:Type xy:ProductTypeViewModel}" ItemTemplate="{StaticResource LastLegConverter}" ItemsSource="{Binding Products}">
-                    <TextBlock Text="{Binding MyProductType}"/>
-                   
-                  
-                </HierarchicalDataTemplate>
+                    <TreeView.Resources>
 
-                </TreeView.Resources>
+                        <HierarchicalDataTemplate 
+                            DataType="{x:Type xy:CurrencyViewModel}" 
+                            ItemsSource="{Binding AssetTypes }">
+                            
+                                <TextBlock 
+                                Focusable="False" 
+                                Text="{Binding MyCurrency}" 
+                              Style="{StaticResource TreeViewTextStyle}"
+                                Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"/>
+                        
+                        </HierarchicalDataTemplate>
+
+                        <HierarchicalDataTemplate 
+                            DataType="{x:Type xy:AssetTypeViewModel}" 
+                            ItemsSource="{Binding ProductType}">
+
+                            <TextBlock 
+                                Text="{Binding MyAssetType}" 
+                                Style="{StaticResource TreeViewTextStyle}"
+                                Focusable="False" 
+                                Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"/>
+
+                        </HierarchicalDataTemplate>
+                        <HierarchicalDataTemplate 
+                            DataType="{x:Type xy:ProductTypeViewModel}" 
+                            ItemTemplate="{StaticResource LastLegConverter}" 
+                            ItemsSource="{Binding Products}" >
+                            
+                            <TextBlock Text="{Binding MyProductType}" SnapsToDevicePixels="True" Focusable="False" 
+                                       Style="{StaticResource TreeViewTextStyle}"
+                                    Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"/>
 
 
-        </TreeView>
-        <TextBlock x:Name="ABC" Grid.Column="1" Width="200" Height="140" Text="{Binding ElementName=MyTree, Path=SelectedValue, NotifyOnSourceUpdated=True}" TextWrapping="Wrap"/>
-        <TextBlock Grid.Column="1" Width="100" Text="{Binding ElementName=ABC, Path=Text}"/>    
+                        </HierarchicalDataTemplate>
+
+                    </TreeView.Resources>
 
 
+                </TreeView>
+    
 
-
+       
     </Grid>
 </UserControl>

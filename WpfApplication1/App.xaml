@@ -1,11 +1,14 @@
-﻿<extra:ElysiumApplication x:Class="flc.FrontDoor.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:extra="http://schemas.extra.com/ui"
-             xmlns:params="http://schemas.codeplex.com/elysium/params"
-             xmlns:metro="http://schemas.codeplex.com/elysium"
-                         
-             StartupUri="\Views\GraphTreeView.xaml" Theme="Light">             
+﻿<extra:ElysiumApplication 
+    x:Class="flc.FrontDoor.App" 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+    xmlns:controls="clr-namespace:Framework.UI.Controls;assembly=Framework.UI" 
+    xmlns:assets="clr-namespace:flc.FrontDoor.Assets" 
+    xmlns:extra="http://schemas.extra.com/ui" 
+    xmlns:params="http://schemas.codeplex.com/elysium/params" 
+    xmlns:metro="http://schemas.codeplex.com/elysium" 
+    StartupUri="\Views\SecuritySelection.xaml" 
+    Theme="Light">             
           
         <!--   StartupUri="\Views\LoginView.xaml"
                           Theme="Light"-->
@@ -13,78 +16,13 @@
                           
                           
     <Application.Resources>
-        <Style x:Key="{x:Static SystemParameters.FocusVisualStyleKey}" TargetType="{x:Type PasswordBox}">
-            <Setter Property="Background" Value="{StaticResource TransparentBrush}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
-            <Setter Property="BorderThickness" Value="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldThickness), Mode=OneWay}" />
-            <Setter Property="Margin" Value="-2"/>
-            <Setter Property="SnapsToDevicePixels" Value="True"/>
-            <Setter Property="Control.Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type PasswordBox}">
-                        <extra:BorderFix Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}">
-                            <extra:BorderFix.Triggers>
-                                <EventTrigger RoutedEvent="Border.Loaded">
-                                    <BeginStoryboard>
-                                        <Storyboard AutoReverse="True"
-                                                Duration="00:00:01" 
-                                                RepeatBehavior="Forever">
-                                            <DoubleAnimation Storyboard.TargetProperty="(UIElement.Opacity)" 
-                                                         To="0"/>
-                                        </Storyboard>
-                                    </BeginStoryboard>
-                                </EventTrigger>
-                            </extra:BorderFix.Triggers>
-                        </extra:BorderFix>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/MyDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+        </ResourceDictionary>
+       
 
-        <Style x:Key="MyGraphTreeViewStyle" BasedOn="{StaticResource {x:Type TreeView}}" TargetType="{x:Type TreeView}">
-            <Setter Property="Background" Value="{StaticResource TransparentBrush}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource TransparentBrush}"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="FocusVisualStyle" Value="{StaticResource {x:Static SystemParameters.FocusVisualStyleKey}}"/>
-            <Setter Property="Foreground" Value="{StaticResource ContrastBrush}"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="ItemContainerStyle" Value="{StaticResource MyGraphTreeViewStyle}"/>
-            <Setter Property="ItemsPanel">
-                <Setter.Value>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical"/>
-                    </ItemsPanelTemplate>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TreeView}">
-                        <extra:BorderFix x:Name="Bd" 
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Padding="{TemplateBinding Padding}">
-                            <ScrollViewer x:Name="ScrollViewer" 
-                                          CanContentScroll="False" 
-                                          Focusable="false" 
-                                          HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" 
-                                          Padding="{TemplateBinding Padding}" 
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                          VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}">
-                                <ItemsPresenter/>
-                            </ScrollViewer>
-                        </extra:BorderFix>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        
-        
-        
     </Application.Resources>
 </extra:ElysiumApplication>

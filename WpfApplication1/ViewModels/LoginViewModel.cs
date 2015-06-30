@@ -1,27 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Windows.Media;
-using System.Threading.Tasks;
-using Framework.UI.Controls;
-using Framework.UI.Input;
-using System.ComponentModel;
-using Framework.ComponentModel;
-using Framework.ComponentModel.Rules;
-using flc.FrontDoor.Models;
-using flc.FrontDoor.Assets;
-using System.Windows.Controls;
-using System.Security;
-
-
+﻿
 namespace flc.FrontDoor.ViewModels
 {
-    class LoginViewModel : BaseViewModel
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading;
+    using System.Windows.Media;
+    using System.Threading.Tasks;
+    using Framework.UI.Controls;
+    using Framework.UI.Input;
+    using System.ComponentModel;
+    using Framework.ComponentModel;
+    using Framework.ComponentModel.Rules;
+    using flc.FrontDoor.Models;
+    using flc.FrontDoor.Assets;
+    using System.Windows.Controls;
+    using System.Security;
+internal class LoginViewModel : BaseViewModel
     {
-
-
 
         #region PrivateMembers
         private string _username;
@@ -61,14 +58,14 @@ namespace flc.FrontDoor.ViewModels
         {
             get { return this._pass; }
             set { this.SetProperty(ref this._pass, value); }
-        } 
+        }
         #endregion
 
         #region Model Methods
         private void Login(string message)
         {
             this.IsBusy = false;
-            
+
             try
             {
                 _currentuser = _loginAuthenticate.AuthenticateMe(this._username, this._pass.Password);
@@ -77,7 +74,7 @@ namespace flc.FrontDoor.ViewModels
 
                 if (!string.IsNullOrEmpty(_currentuser.Name))
                 {
-                 
+
                     MessageDialog.ShowAsync("Welcome", _currentuser.Name);
                 }
                 Username = String.Empty;
@@ -92,16 +89,16 @@ namespace flc.FrontDoor.ViewModels
 
             }
 
-        } 
+        }
         #endregion
 
         #region Delegate Commands and Validation Rules
         private DelegateCommand<string> loginCommand;
         public DelegateCommand<string> LoginCommand
         {
-            get 
+            get
             {
-                return this.loginCommand;      
+                return this.loginCommand;
             }
 
         }
@@ -109,10 +106,10 @@ namespace flc.FrontDoor.ViewModels
         {
             Rules.Add(new DelegateRule<BaseViewModel>("Username", "Username cannot be empty", x =>
             {
-               /*<interaction logic> 
-                Casting Base class to derived class and implementing validation rule
-                </interaction logic>*/
-               var cast =  (LoginViewModel)x; return !string.IsNullOrWhiteSpace(cast.Username);
+                /*<interaction logic> 
+                 Casting Base class to derived class and implementing validation rule
+                 </interaction logic>*/
+                var cast = (LoginViewModel)x; return !string.IsNullOrWhiteSpace(cast.Username);
             }));
 
             Rules.Add(new DelegateRule<BaseViewModel>("Password", "Password cannot be empty", x =>
@@ -123,10 +120,8 @@ namespace flc.FrontDoor.ViewModels
                      var cast = (LoginViewModel)x; return !string.IsNullOrWhiteSpace(cast.Pass.Password);
                  }));
         }
-        
+
         #endregion
 
-        
-        }
     }
 }

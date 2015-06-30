@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Diagnostics;
-
+﻿
 namespace flc.FrontDoor.Common
 {
-    
-        public class ActionCommand<T> : ICommand where T : class
+
+    using System;
+    using System.Linq;
+    using System.Text;
+    using System.Diagnostics;
+    using System.Windows.Input;
+    using System.Threading.Tasks;
+    using System.Collections.Generic;
+
+public class ActionCommand<T> : ICommand where T : class
         {
             readonly Action<T> _execute;
             readonly Predicate<T> _canExecute;
@@ -50,7 +51,9 @@ namespace flc.FrontDoor.Common
                 var param = parameter as T;
 
                 if (parameter != null && param == null)
-                    throw new InvalidOperationException("Wrong type of parameter being passed in.  Expected [" + typeof(T) + "]but was [" + parameter.GetType() + "]");
+                    throw new InvalidOperationException(String.Format(
+                                                        "Wrong type of parameter being passed in.  Expected [{0}]but was [{1}]"
+                                                        , typeof(T), parameter.GetType()));
 
                 if (!CanExecute(param))
                     throw new InvalidOperationException("Should not try to execute command that cannot be executed");
@@ -118,6 +121,4 @@ namespace flc.FrontDoor.Common
             #endregion // ICommand Members
         }
 
-
 }
-

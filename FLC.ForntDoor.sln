@@ -5,6 +5,10 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "flc.FrontDoor", "WpfApplication1\flc.FrontDoor.csproj", "{D0971D42-F465-433C-81A7-0CBF9E4C3A82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.UI", "..\FLC.Front.Door\WpfApplication1\Resources\ElysiumExtra1\ElysiumExtra\Source\Framework.UI\Framework.UI.csproj", "{925D4016-8D41-4E81-9287-695C5A1E1E85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework", "..\FLC.Front.Door\WpfApplication1\Resources\ElysiumExtra1\ElysiumExtra\Source\Framework\Framework.csproj", "{20D52B40-00B7-40D1-A3A0-56F3D900C0D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,12 @@ Global
 		{D0971D42-F465-433C-81A7-0CBF9E4C3A82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0971D42-F465-433C-81A7-0CBF9E4C3A82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0971D42-F465-433C-81A7-0CBF9E4C3A82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{925D4016-8D41-4E81-9287-695C5A1E1E85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{925D4016-8D41-4E81-9287-695C5A1E1E85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{925D4016-8D41-4E81-9287-695C5A1E1E85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20D52B40-00B7-40D1-A3A0-56F3D900C0D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20D52B40-00B7-40D1-A3A0-56F3D900C0D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20D52B40-00B7-40D1-A3A0-56F3D900C0D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

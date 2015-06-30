@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="flc.FrontDoor.Views.Security_Selection"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:metro="http://schemas.codeplex.com/elysium"
+             xmlns:params="http://schemas.codeplex.com/elysium/params"
+             xmlns:extra="http://schemas.extra.com/ui"
+             xmlns:xy="clr-namespace:flc.FrontDoor.Data"
+             xmlns:local="clr-namespace:flc.FrontDoor.Views"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:asset="clr-namespace:flc.FrontDoor.Assets"
+             mc:Ignorable="d" Opacity="0.9"
+             d:DesignHeight="300" d:DesignWidth="400">
+
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            
+            <ColumnDefinition Width="1*"/>
+
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height=".1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <asset:AutoCompleteSearch 
+            x:Name="AutocompleteBox" 
+            Grid.Row="0"
+            IsDropDownOpen="True"
+            Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Top, Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}">
+        
+            
+        </asset:AutoCompleteSearch>
+        <StackPanel 
+            HorizontalAlignment="Left" 
+            Grid.Column="0" 
+            Grid.Row="1" IsEnabled="{Binding ElementName=AutocompleteBox, Path=IsDropDownOpen, Converter={StaticResource InverseBoolConverter}}"
+            Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Top, Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}" 
+            ScrollViewer.CanContentScroll="True" 
+            ScrollViewer.HorizontalScrollBarVisibility="Visible" 
+            ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <TextBlock Text="Select a Security" HorizontalAlignment="Center" Style="{StaticResource HeaderTextStyle}"  Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"/>
+            <local:GraphTreeView x:Name="SelectionTree"  />
+
+        </StackPanel>
+        <Separator 
+            Grid.Column="0" 
+            HorizontalAlignment="Right" 
+            Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}" 
+            Style="{StaticResource VerticalSeparatorStyle}"/>
+        <StackPanel 
+            HorizontalAlignment="Left" 
+            Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Top, Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}" 
+            Grid.Column="1">
+
+            <TextBlock 
+                Text="{Binding MyProd, ElementName=SelectionTree, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" 
+                Style="{StaticResource HeaderTextStyle}" 
+                Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Top, Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}" 
+                x:Name="MyTextBox">       
+            </TextBlock>
+           
+        </StackPanel>
+    </Grid>
+</UserControl>
