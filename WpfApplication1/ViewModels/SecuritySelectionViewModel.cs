@@ -11,23 +11,23 @@ namespace flc.FrontDoor.ViewModels
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Controls;
+    using flc.FrontDoor.Data;
 class SecuritySelectionViewModel:BaseViewModel
     {
-    
-    private  string _selectedproduct;
-        
-    public string SelectedProduct
-     {
-        get{ return this._selectedproduct;}
 
-         set { this.SetProperty(ref this._selectedproduct, value);
+        // Fields...
+        private IEnumerable<ProductSearchViewModel> _searchList;
+
+        public IEnumerable<ProductSearchViewModel> SearchList
+        {
+            get { return _searchList; }
+            set { _searchList = value; }
         }
-        	
-      }	
 
         	public SecuritySelectionViewModel ()
 	{
-                
+       this.SearchList = HierarchyViewModel.products.Select(product=> new ProductSearchViewModel{Product=product,Name=product.Name}) ;
+               
 	}	 
 
         }

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace flc.FrontDoor.Data
 {
-    /// <summary>
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+/// <summary>
     /// Basic DataType for plotting
     /// </summary>
     public class XYPoint
@@ -25,20 +25,15 @@ namespace flc.FrontDoor.Data
 
         }
 
-        public DoubleSeries(int capacity)
+        public  DoubleSeries(int capacity)
             : base(capacity)
         {
 
         }
 
-
-
-
-
         public IList<double> XData { get { return this.Select(x => x.X).ToArray(); } }
         public IList<double> YData { get { return this.Select(x => x.Y).ToArray(); } }
 
     }
-
 
 }

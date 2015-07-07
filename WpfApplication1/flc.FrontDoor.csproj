@@ -49,6 +49,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Extras.CommonServiceLocator">
+      <HintPath>..\packages\Autofac.Extras.CommonServiceLocator.3.2.0\lib\net40\Autofac.Extras.CommonServiceLocator.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.CodeRush.Common, Version=13.1.5.0, Culture=neutral, PublicKeyToken=35c9f04b7764aa3d, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.CodeRush.Core, Version=13.1.5.0, Culture=neutral, PublicKeyToken=35c9f04b7764aa3d, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.CodeRush.PlugInCore, Version=13.1.5.0, Culture=neutral, PublicKeyToken=35c9f04b7764aa3d, processorArchitecture=MSIL" />
@@ -144,23 +150,45 @@
     <Compile Include="Assets\AutoCompleteSearch.cs" />
     <Compile Include="Assets\Identities.cs" />
     <Compile Include="Assets\BCrypt.cs" />
+    <Compile Include="Assets\TabViewPersistence.cs" />
     <Compile Include="Common\ActionCommand.cs" />
+    <Compile Include="Common\AutocompleteBoxBehavior.cs" />
     <Compile Include="Common\Interface1.cs" />
+    <Compile Include="Common\TextBlockBehaviour.cs" />
+    <Compile Include="Converters\EnumToStringConverter.cs" />
+    <Compile Include="Converters\ProductParamConverter.cs" />
+    <Compile Include="Converters\ProductSearchToSelectedProductConverter.cs" />
+    <Compile Include="Converters\ProductToNameConverter.cs" />
+    <Compile Include="Data\Class1.cs" />
+    <Compile Include="ViewModels\ProductSearchViewModel.cs" />
     <Compile Include="Data\Datatypes.cs" />
     <Compile Include="Data\Instrument Definition.cs" />
-    <Compile Include="Data\Instrument.cs">
+    <Compile Include="ViewModels\HierarchyViewModel.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
+    <Compile Include="ViewModels\RatesViewModel.cs" />
     <Compile Include="ViewModels\SecuritySelectionViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Views\FrontDoor.xaml.cs">
       <DependentUpon>FrontDoor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RatesView.xaml.cs">
+      <DependentUpon>RatesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SecuritySelection.xaml.cs">
       <DependentUpon>SecuritySelection.xaml</DependentUpon>
     </Compile>
-    <Page Include="Resources\MyDictionary.xaml">
+    <Page Include="Common\Listbox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\ControlsDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\RatesDataGridTemplates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -185,6 +213,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\FrontDoor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RatesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

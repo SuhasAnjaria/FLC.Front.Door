@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using flc.FrontDoor.Views;
 using flc.FrontDoor.ViewModels;
+using Framework.UI.Controls;
 
 
 namespace flc.FrontDoor.Views
@@ -21,7 +22,7 @@ namespace flc.FrontDoor.Views
     /// <summary>
     /// Interaction logic for Security_Selection.xaml
     /// </summary>
-    public partial class Security_Selection : UserControl
+    public partial class Security_Selection : OverlayWindow
     {
        
 
@@ -31,5 +32,26 @@ namespace flc.FrontDoor.Views
             
            
         }
+
+        private void CLose(object sender, RoutedEventArgs e)
+        {
+           
+            this.Close();
+        }
+
+        private void AutoBoxClick(object sender, SelectionChangedEventArgs e)
+        {
+             var A = ((AutoCompleteBox)sender).SelectedItem;
+            if(A!=null)
+            {
+               
+                var B = A as ProductSearchViewModel;
+                SelectionTree.SelectedProduct = B.Name;
+                SelectionTree.SelectedInstrument = B.Product;
+            }
+
+        }
+
+       
     }
 }

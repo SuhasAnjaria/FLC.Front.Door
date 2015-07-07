@@ -5,8 +5,10 @@
         xmlns:params="http://schemas.codeplex.com/elysium/params"
         xmlns:metro="http://schemas.codeplex.com/elysium"
                WindowStartupLocation="CenterScreen"
-        Title="Frontlight Capital Login" Height="350" Width="425"
-    Style="{StaticResource AccentTitleBarWindowStyle}"
+              Icon="{StaticResource Flc Icon}"
+        Title="Frontlight Capital Login" Height="350" Width="425" Opacity="0.9"
+    
+    TaskbarOverlayTemplate="{StaticResource WindowOverlayTemplate}"
              >
     <Grid>
         <Grid.RowDefinitions>
@@ -41,7 +43,7 @@
                 Text="Username:" 
                 TextAlignment="Right" 
                 Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Bottom,Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}" 
-                Style="{StaticResource NormalTextStyle}">
+                Style="{StaticResource BoldTextStyle}">
             </TextBlock>
 
 
@@ -59,7 +61,7 @@
                 Text="Password:" 
                 TextAlignment="Right" 
                 Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Bottom,Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}" 
-                Style="{StaticResource NormalTextStyle}">
+                Style="{StaticResource BoldTextStyle}">
             </TextBlock>
 
         </StackPanel>

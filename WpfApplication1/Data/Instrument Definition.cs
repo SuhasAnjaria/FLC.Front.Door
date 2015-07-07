@@ -45,6 +45,13 @@ namespace flc.FrontDoor.Data
 
     }
 
+    public enum AssetType
+    {
+        Rates,
+        FX,
+        Credit
+    }
+
     public enum IndexDescriptor
     {
         [Display(Description = "Curve with a Tenor")]
@@ -52,6 +59,15 @@ namespace flc.FrontDoor.Data
 
         [Display(Description = "Time Series object with Values for Time frame")]
         TimeSeries
+    }
+    public enum Currency
+    {
+        USD,
+        EUR,
+        JPY,
+        AUD,
+        SEK,
+        NOK
     }
 
     public enum Features
@@ -127,5 +143,67 @@ namespace flc.FrontDoor.Data
       //  Dictionary<Instrument,double> replicatingstrategy;
     }
 
+    public class Instrument
+    {
+
+        #region Fields
+
+        // Fields...
+        private string _bbgCode;
+        private List<Features> _features;
+        private string _productType;
+        private Currency _currency;
+        private AssetType _assettype;
+        private string _name;
+        #endregion
+
+       #region Properties
+       // public properties...
+       public string Name
+       {
+           get { return this._name; }
+           set { this._name = value; }
+       }
+
+       public AssetType AssetType
+       {
+           get { return this._assettype; }
+           set { this._assettype = value; }
+       }
+
+       public Currency Currency
+       {
+           get { return this._currency; }
+           set { this._currency = value; }
+       }
+
+       public string ProductType
+       {
+           get { return this._productType; }
+           set { this._productType = value; }
+       }
+
+       public List<Features> AvailableFeatures
+       {
+           get { return this._features; }
+           set { this._features = value; }
+       }
+
+       public string BbgCode
+       {
+           get { return this._bbgCode; }
+           set { this._bbgCode = value; }
+       }
+       #endregion
+
+       #region Public Overrrides
+       //public override string ToString()
+       //{
+       //    return Name;
+       //}
+
+       #endregion
+
+    }
 
 }

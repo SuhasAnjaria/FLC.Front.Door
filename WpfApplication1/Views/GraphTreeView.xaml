@@ -12,8 +12,8 @@
     Height="300" 
     Width="250">
     <UserControl.Resources>
-        <xy:ProducttoNameConverter x:Key="ProductToNameConverter"/>
-        <ItemContainerTemplate x:Key="LastLegConverter" >
+       
+        <ItemContainerTemplate x:Key="LastLegTemplate" >
 
             <Button 
                 Focusable="False" 
@@ -21,7 +21,7 @@
                 x:Name="SelectionButon" 
                  
                 Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}" 
-                Content="{Binding}" 
+                Content="{Binding Converter={StaticResource ProductToNameConverter}}" 
                 Click="_AttachSecurity"/>
 
         </ItemContainerTemplate>
@@ -33,8 +33,9 @@
 
         <TreeView 
             x:Name="MyTree" 
-            Width="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=Width}" 
-            ItemsSource="{Binding Currency}">
+            extra:UIElementAttached.IsBubblingMouseWheelEvents="True"
+            HorizontalAlignment="Center"
+            ItemsSource="{Binding Currencies}">
 
 
                     <TreeView.Resources>
@@ -64,7 +65,7 @@
                         </HierarchicalDataTemplate>
                         <HierarchicalDataTemplate 
                             DataType="{x:Type xy:ProductTypeViewModel}" 
-                            ItemTemplate="{StaticResource LastLegConverter}" 
+                            ItemTemplate="{StaticResource LastLegTemplate}" 
                             ItemsSource="{Binding Products}" >
                             
                             <TextBlock Text="{Binding MyProductType}" SnapsToDevicePixels="True" Focusable="False" 

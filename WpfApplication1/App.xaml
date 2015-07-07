@@ -7,7 +7,8 @@
     xmlns:extra="http://schemas.extra.com/ui" 
     xmlns:params="http://schemas.codeplex.com/elysium/params" 
     xmlns:metro="http://schemas.codeplex.com/elysium" 
-    StartupUri="\Views\SecuritySelection.xaml" 
+    xmlns:VM="clr-namespace:flc.FrontDoor.ViewModels"
+    StartupUri="\Views\FrontDoor.xaml" 
     Theme="Light">             
           
         <!--   StartupUri="\Views\LoginView.xaml"
@@ -18,11 +19,12 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/MyDictionary.xaml"/>
+                <ResourceDictionary Source="Resources/ControlsDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            
+            <VM:ViewModelLocator x:Key="ViewModelLocator"/>
         </ResourceDictionary>
        
+   
 
     </Application.Resources>
 </extra:ElysiumApplication>

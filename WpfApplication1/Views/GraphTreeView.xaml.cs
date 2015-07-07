@@ -1,4 +1,5 @@
-﻿
+﻿using System.Runtime.InteropServices;
+
 namespace flc.FrontDoor.Views
 {
     using System;
@@ -18,37 +19,61 @@ namespace flc.FrontDoor.Views
     using flc.FrontDoor.Data;
     using System.Collections;
     using flc.FrontDoor.ViewModels;
-/// <summary>
+    using System.ComponentModel;
+    using Framework.UI.Controls;
+    /// <summary>
     /// Interaction logic for GraphTreeView.xaml
     /// </summary>
     public partial class GraphTreeView : UserControl
     {
-
-        public string MyProduct = "ABCDE";
 
         public GraphTreeView()
         {
             InitializeComponent();
 
             this.DataContext = new HierarchyViewModel();
-           
-         }
+
+        }
 
         private void _AttachSecurity(object sender, RoutedEventArgs e)
         {
-            this.SelectedProduct = ((Button)sender).Content.ToString();
-        }
+            
+               this.SelectedProduct = ((Button)sender).Content.ToString();
+                this.SelectedInstrument = HierarchyViewModel.products.FirstOrDefault(o => o.Name == this.SelectedProduct);
+                
+            }
+
 
         public string SelectedProduct
         {
-            get { return (string)GetValue(MyProdProperty); }
-            set { SetValue(MyProdProperty, value); }
+            get { return (string)GetValue(SelectedProductProperty); }
+            set {
+
+                if (value != null)
+                
+                {
+                 SetValue(SelectedProductProperty, value);
+                }
+                 
+            
+            }
         }
 
-  
-        public static readonly DependencyProperty MyProdProperty =
-            DependencyProperty.Register("MyProd", typeof(string), typeof(GraphTreeView), new PropertyMetadata(""));
+        // Using a DependencyProperty as the backing store for SelectedProduct.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectedProductProperty =
+            DependencyProperty.Register("SelectedProduct", typeof(string), typeof(GraphTreeView), new PropertyMetadata(""));
 
-    }
+        public Instrument SelectedInstrument
+        {
+            get { return (Instrument)GetValue(SelectedInstrumentProperty); }
+            set { SetValue(SelectedInstrumentProperty, value); }
+        }
 
+        // Using a DependencyProperty as the backing store for SelectedInstrument.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectedInstrumentProperty =
+            DependencyProperty.Register("SelectedInstrument", typeof(Instrument), typeof(GraphTreeView), null);
+
+        
+        
     }
+}

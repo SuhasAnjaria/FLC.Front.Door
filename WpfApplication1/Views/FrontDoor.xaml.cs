@@ -12,17 +12,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Framework.UI.Controls;
 
 namespace flc.FrontDoor.Views
 {
     /// <summary>
     /// Interaction logic for UserControl1.xaml
     /// </summary>
-    public partial class FrontDoor : UserControl
+    public partial class FrontDoor 
     {
         public FrontDoor()
         {
             InitializeComponent();
         }
+
+
     }
 }

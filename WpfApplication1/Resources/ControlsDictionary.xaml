@@ -3,7 +3,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
     xmlns:controls="clr-namespace:Framework.UI.Controls;assembly=Framework.UI" 
     xmlns:params="http://schemas.codeplex.com/elysium/params" 
-    xmlns:metro="http://schemas.codeplex.com/elysium">
+    xmlns:metro="http://schemas.codeplex.com/elysium"
+    xmlns:converters="clr-namespace:flc.FrontDoor.Converters"
+    xmlns:common="clr-namespace:flc.FrontDoor.Common">
 
     <ResourceDictionary.MergedDictionaries>
         <controls:SharedResourceDictionary Source="/Framework.UI;component/Themes/WPF/Base/Converter.xaml"/>
@@ -13,8 +15,18 @@
         <controls:SharedResourceDictionary Source="/Framework.UI;component/Themes/WPF/Controls/Expander.xaml"/>
         <controls:SharedResourceDictionary Source="/Framework.UI;component/Themes/ElysiumExtra/BorderFix.xaml"/>
         <controls:SharedResourceDictionary Source="/Framework.UI;component/Themes/WPF/Controls/MenuItem.xaml"/>
+        <ResourceDictionary Source="/Common/Listbox.xaml"/>
+            
+         
+       
     </ResourceDictionary.MergedDictionaries>
-
+    <converters:ProductToNameConverter x:Key="ProductToNameConverter"/>
+    <converters:EnumToStringConverter x:Key="EnumToStringConverter"/>
+    <converters:ProductSearchToSelectedProductConverter x:Key="ProductSearchToSelectedProductConverter"/>
+    <converters:ProductParamConverter x:Key="ProductParamConverter"/>
+    <BitmapImage x:Key="Flc Icon" UriSource="C:\MSMF\FL\lightning31.png"/>
+    
+    
     <Style x:Key="TreeViewTextStyle" BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
         <Setter Property="FontSize" Value="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.TextFontSize)}"/>
         <Setter Property="FontWeight" Value="Normal"/>
@@ -35,7 +47,7 @@
         <Setter Property="Padding" Value="{Binding RelativeSource={RelativeSource Self},Path=(params:General.BoldPadding),Mode=OneWay}" />
         <Setter Property="MinWidth" Value="70" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="MinWidth" Value="60"/>
+        <Setter Property="MinWidth" Value="80"/>
         <Setter Property="MinHeight" Value="30"/> 
         <Setter Property="MaxHeight" Value="30"/>
         <Setter Property="IsEnabled" Value="False"/>
@@ -51,11 +63,10 @@
             
             </Style.Triggers>
 
+
     </Style>
 
 
-
-
-
+   
 
 </ResourceDictionary>
