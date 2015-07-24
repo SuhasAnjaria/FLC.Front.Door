@@ -13,8 +13,8 @@ namespace flc.FrontDoor.ViewModels
     using System.ComponentModel;
     using Framework.ComponentModel;
     using Framework.ComponentModel.Rules;
-    using flc.FrontDoor.Models;
-    using flc.FrontDoor.Assets;
+    using FrontDoor.Models;
+    using FrontDoor.Assets;
     using System.Windows.Controls;
     using System.Security;
 internal class LoginViewModel : BaseViewModel

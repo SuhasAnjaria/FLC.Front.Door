@@ -10,7 +10,7 @@
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:Views="clr-namespace:flc.FrontDoor.Views"
     xmlns:Assets="clr-namespace:flc.FrontDoor.Assets"
-    Title="FLC FrontDoor" Opacity=".9"
+    Title="FLC FrontDoor" Opacity="1"
     Icon="{StaticResource Flc Icon}"
     
     Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"
@@ -18,7 +18,7 @@
     TaskbarOverlayTemplate="{StaticResource WindowOverlayTemplate}"
  
     mc:Ignorable="d" 
-    Height="768" 
+    Height="850" 
     Width="1334">
     
     <Grid>
@@ -27,7 +27,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Separator Grid.Row="1" Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}" VerticalAlignment="Top" Panel.ZIndex="2" Opacity="0.6"/>
+        <Separator Grid.Row="1" Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}" VerticalAlignment="Top" Panel.ZIndex="2" Opacity="0.5"/>
         <extra:AnimatedWrapPanel Grid.Row="1">
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File" Width="49" HorizontalContentAlignment="Center" FontStretch="Expanded"  FontSize="14">
@@ -58,8 +58,8 @@
             SelectedIndex="3" 
             Grid.Row="2" 
             HorizontalAlignment="Center" HorizontalContentAlignment="Center" 
-            Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}" >
-            <!--Assets:TabContent.IsCached="True"-->
+            Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"  >
+           
             <TabControl.Resources>
                 <Style TargetType="{x:Type TabPanel}">
                     <Setter Property="HorizontalAlignment" Value="Center"/>

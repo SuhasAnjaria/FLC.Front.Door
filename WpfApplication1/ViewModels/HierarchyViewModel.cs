@@ -9,106 +9,52 @@ using System.Text;
 using Framework.ComponentModel;
 using Framework.UI.Input;
 using Framework.IO;
+using System.Threading.Tasks;
 using System.Windows;
-using flc.FrontDoor.ViewModels;
- using System.Windows.Data;
+using FrontDoor.ViewModels;
+using System.Windows.Data;
 using System.Windows.Documents;
+using FacadeService;
+using Autofac;
+using flc.FrontDoor.Models;
+using System.Globalization;
 
      #region Hierarchy Transformation Model
-class HierarchyViewModel : BaseViewModel
+ public class HierarchyViewModel : BaseViewModel
     {
     
     public static Instrument _selectedInstrument;
     public static string _selectedProduct ;
-    private List<Instrument> _products;
+    private List<Instrument> _products = new List<Instrument>();
 
 
-    public  string SelectedProduct
-    {
-        get {
-            
-            return _selectedProduct;
-        
-        }
-        set 
-        { if(value!=null)
-            {
-            //_selectedProduct = value;
-            //OnPropertyChanged("SelectedProduct");
-            this.SetProperty(() => _selectedProduct = value);
-            }
-         }
-    }
-
-
-    public  Instrument SelectedInstrument
-    {
-        get { return _selectedInstrument;
-        
-        }
-        set
-        {
-            if (value != null)
-            {
-                //_selectedInstrument = value;
-                //OnPropertyChanged("SelectedInstrument");
-                this.SetProperty(() => _selectedInstrument = value);
-            }
-        }
-    }
-
+  
+         
          public List<Instrument> Products
          {
              get { return this._products; }
              set { this.SetProperty(ref this._products, value); }
 
-         }	
-        		
-        public static List<Instrument> products = new List<Instrument>{
-                new Instrument{
-                    Name = "OIS Swap", AssetType =AssetType.Rates,ProductType="Swap",Currency=Currency.USD ,
-                    AvailableFeatures = new List<Features>{Features.Price,Features.Rate,Features.Volatility },},
+         }
 
-                new Instrument{
-                    Name = "Libor Swap", AssetType =AssetType.Rates,ProductType="Swap",Currency=Currency.USD,
-                    AvailableFeatures = new List<Features>{Features.Price, Features.Rate, Features.Volatility}},
-
-                new Instrument{
-                    Name = "Libor Swaption", AssetType =AssetType.Rates,ProductType="Swaption",Currency=Currency.USD,
-                    AvailableFeatures= new List<Features>{Features.Price, Features.Rate, Features.Volatility}},
-
-                new Instrument{
-                    Name = "Eunoia Swap", AssetType =AssetType.Rates,ProductType="Swap",Currency=Currency.EUR,
-                AvailableFeatures= new List<Features>{Features.Price, Features.Rate, Features.Volatility}},
-
-                new Instrument{
-                    Name = "Libor Swap", AssetType =AssetType.Rates,ProductType="Swap",Currency=Currency.EUR,
-                AvailableFeatures= new List<Features>{Features.Price, Features.Rate, Features.Volatility}},
-
-                new Instrument{
-                    Name = "Libor Swaption", AssetType =AssetType.Rates,ProductType="Swaption",Currency=Currency.EUR,
-                    AvailableFeatures= new List<Features>{Features.Price, Features.Rate, Features.Volatility}},
-
-                new Instrument{
-                    Name = "OIS", AssetType =AssetType.Rates,ProductType="Cap",Currency=Currency.USD,
-                    AvailableFeatures= new List<Features>{Features.Price, Features.Rate, Features.Volatility,Features.DVO1}},
-
-                new Instrument{
-                    Name = "OIS", AssetType =AssetType.Rates,ProductType="Cap",Currency=Currency.EUR,
-                    AvailableFeatures= new List<Features>{Features.Price, Features.Rate, Features.Volatility}},
-
-                new Instrument{
-                    Name = "USD-EUR Swap", AssetType =AssetType.FX,ProductType="Swap",Currency=Currency.USD,
-                    AvailableFeatures= new List<Features>{Features.Price, Features.Rate, Features.Volatility}},
-
-                new Instrument{
-                    Name = "EUR-SEK Swap", AssetType =AssetType.FX,ProductType="Swap",Currency=Currency.EUR,
-                    AvailableFeatures= new List<Features>{Features.Price, Features.Rate, Features.Volatility}},
-            };
+        public static List<Instrument> products = new List<Instrument>();
         public IEnumerable<CurrencyViewModel> Currencies { get; set; }
-        public HierarchyViewModel()
+        public  HierarchyViewModel()
         {
-            Products = products;
+            //Products = products;
+        
+            using(var scope = ModelBuilder.ModelContainer.BeginLifetimeScope())
+            {
+                var a = scope.Resolve<Instrumentlist>();
+                var b = a.InstrumentMaster;
+                foreach(var m in b)
+                {
+                    if (m.Underlying != "(NA)")
+                    {
+                        this.Products.Add(m);
+                    }
+                }
+            }
             Currencies = Products
                 .OrderBy(prod => prod.Currency)
                 .GroupBy(prod => prod.Currency)
@@ -120,9 +66,59 @@ class HierarchyViewModel : BaseViewModel
             
             
         }
+
+         public  HierarchyViewModel(int a)
+        {
+            using (FacadeServiceClient session = new FacadeServiceClient())
+            {
+                InstrumentDTO[] tickers = session.GetInstruments();
+                
+                TextInfo myTI = new CultureInfo("en-US", false).TextInfo;
+                var _Action = new Action<InstrumentDTO> ((o)=>DoSomething(o));
+                Parallel.ForEach(tickers,_Action);
+                //foreach(InstrumentDTO ticker in tickers)
+                //{
+                //    
+                //    var A = new Instrument
+                //    {
+                //        Name = ticker.FLCTicker,
+                //        AssetType = (AssetType)Enum.Parse(typeof(AssetType), ticker.AssetType, true),
+                //        ProductType = myTI.ToTitleCase(ticker.ProductType),
+                //        Currency = (Currency)Enum.Parse(typeof(Currency), ticker.Currency, true),
+                //        BbgCode = ticker.BloombergTicker,
+                //        DqCode = ticker.DataQueryTicker,
+                //        AvailableFeatures = ticker.Fields.Select(c => (Features)Enum.Parse(typeof(Features), c, true)).ToList()
+
+                //    };
+                //    HierarchyViewModel.products.Add(A);
+
+                //}
+               
+            }
+        }
+
+            private static void DoSomething(flc.FrontDoor.FacadeService.InstrumentDTO ticker)
+            {
+                lock (HierarchyViewModel.products)
+                {
+                    TextInfo myTI = new CultureInfo("en-US", false).TextInfo;
+                    var A = new Instrument
+                    {
+                        Name = ticker.FLCTicker,
+                        AssetType = (AssetType)Enum.Parse(typeof(AssetType), ticker.AssetType, true),
+                        ProductType = myTI.ToTitleCase(ticker.ProductType),
+                        Currency = (Currency)Enum.Parse(typeof(Currency), ticker.Currency, true),
+                       // BbgCode = ticker.BloombergTicker,
+                        //DqCode = ticker.DataQueryTicker,
+                        AvailableFeatures = ticker.Fields.Select(c => (Features)Enum.Parse(typeof(Features), c, true)).ToList()
+
+                    };
+                    HierarchyViewModel.products.Add(A);
+                }
+            }
     }
 
-    class CurrencyViewModel : BaseViewModel
+    public class CurrencyViewModel : BaseViewModel
     {
          
         private Currency currency;
@@ -158,7 +154,7 @@ class HierarchyViewModel : BaseViewModel
     }
 
 
-    class AssetTypeViewModel : BaseViewModel
+    public class AssetTypeViewModel : BaseViewModel
     {
         private AssetType assettype;
 
@@ -186,10 +182,10 @@ class HierarchyViewModel : BaseViewModel
         }
     }
 
-    class ProductTypeViewModel : BaseViewModel
+    public class ProductTypeViewModel : BaseViewModel
     {
       
-        private  IEnumerable<Instrument> _products;
+        private  IEnumerable<UnderlyingViewModel> _underlyingsorted;
         private string producttype;
   
 
@@ -197,9 +193,14 @@ class HierarchyViewModel : BaseViewModel
     public ProductTypeViewModel(string producttype, IEnumerable<Instrument> ProductSorted)
         {
             MyProductType = producttype;
-            _products = ProductSorted
-                .OrderBy(prod => prod.ProductType)
-                .Select(prod => prod).ToArray();
+            _underlyingsorted = ProductSorted
+                .OrderBy(prod => prod.Underlying)
+                .GroupBy(prod => prod.Underlying)
+                .OrderBy(group => group.Key)
+                .Where(group =>group.Key!="NA")
+                .Select(group => new UnderlyingViewModel(group.Key, group.Select(prod => prod).ToArray()
+                    )
+                    ).ToList();
            
         }
 
@@ -213,12 +214,36 @@ class HierarchyViewModel : BaseViewModel
         }
 
 
-        public  IEnumerable<Instrument> Products
+        public  IEnumerable<UnderlyingViewModel> Underlyingsorted
+        {
+            get { return _underlyingsorted; }
+            set { this.SetProperty(ref this._underlyingsorted , value); }
+        }
+    		
+    }
+
+    public class UnderlyingViewModel:BaseViewModel
+    {
+        // Fields...
+        private string _underlying;
+        private IEnumerable<Instrument> _products;
+
+        public IEnumerable<Instrument> Products
         {
             get { return _products; }
             set { this.SetProperty(ref this._products , value); }
         }
-    		
+
+        public string Underlying
+        {
+            get { return _underlying; }
+            set { this.SetProperty(ref this._underlying ,value); }
+        }
+        public UnderlyingViewModel(string underlying, IEnumerable<Instrument> Underlyingsorted)
+        {
+            Underlying = underlying;
+            Products = Underlyingsorted;
+        }
     }
 
    

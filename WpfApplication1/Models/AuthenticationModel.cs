@@ -43,9 +43,8 @@ namespace flc.FrontDoor.Models
         public CustomID AuthenticateMe(params string[] credentials)
         {
             string password = credentials[1];
-            string salt = "#FLC^FRONT^DOOR#";
-            string HashedPassword;
-            HashedPassword = GetHashCode(password, salt);
+            const string salt = "#FLC^FRONT^DOOR#";
+            string HashedPassword = GetHashCode(password, salt);
 
 
             //TODO: CustomID CALLWCF(username,HASHEDPassword) 
@@ -75,8 +74,6 @@ namespace flc.FrontDoor.Models
             string passtohash = password + salt;
             return BCrypt.HashPassword(passtohash, BCrypt.GenerateSalt());
         }
-
-
 
     }
 }

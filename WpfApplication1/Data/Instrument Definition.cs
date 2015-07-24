@@ -49,7 +49,8 @@ namespace flc.FrontDoor.Data
     {
         Rates,
         FX,
-        Credit
+        Credit,
+        Econ
     }
 
     public enum IndexDescriptor
@@ -72,10 +73,14 @@ namespace flc.FrontDoor.Data
 
     public enum Features
     {
-        
+        Premium,
         Price,
         Value,
         Volatility,
+        LastTradeDate,
+        ImpBPVol,
+        ImpYldVol,
+        ForwardRate,
         Rate,
         DVO1,
         PnL,
@@ -85,6 +90,9 @@ namespace flc.FrontDoor.Data
         Rho,
         Duration,
         Convexity,
+        Mid,
+        Level,
+        Close
 
         //Add More Features
     }
@@ -92,69 +100,21 @@ namespace flc.FrontDoor.Data
     /// <summary>
     /// The Index Definition must be defined for each Index. An index is any financial product
     /// </summary>
-    public class InstrumentDefinition
-    {
-
-
-        /// <summary>
-        /// Instrument Name
-        /// </summary>
-       public string name;
-        /// <summary>
-        /// The descriptor of type Curve or Time Series
-        /// </summary>
-        IndexDescriptor descriptor;
-        /// <summary>
-        /// The features the Instrument can carry
-        /// </summary>
-        List<Features> Features;
-
-
-
-        /// <summary>
-        /// The Bloomberg ID
-        /// </summary>
-      public  string bbgtickr;
-        /// <summary>
-        /// The Data Query ID
-        /// </summary>
-        string dqtickr;
-        /// <summary>
-        /// The FLC in-house ID
-        /// </summary>
-        /// 
-     public   string fcltickr;
-
-
-
-        /// <summary>
-        /// The Base Currency in which the Instrument is quoted. 
-        /// </summary>
-        string basecurrency;
-
-        /// <summary>
-        /// The Optional Quoted Currency
-        /// </summary>
-        string quotedcurrency;
-
-        /// <summary>
-        /// The Optional replicating strategy
-        /// </summary>
-      //  Dictionary<Instrument,double> replicatingstrategy;
-    }
-
+   
     public class Instrument
     {
 
         #region Fields
 
         // Fields...
+        private string _dqCode;
         private string _bbgCode;
         private List<Features> _features;
         private string _productType;
         private Currency _currency;
         private AssetType _assettype;
         private string _name;
+        private string _underlying;
         #endregion
 
        #region Properties
@@ -194,16 +154,50 @@ namespace flc.FrontDoor.Data
            get { return this._bbgCode; }
            set { this._bbgCode = value; }
        }
+        
+        public string DqCode
+        {
+        	get {	return _dqCode; }
+        	set { _dqCode = value;	}
+        }
+        public string Underlying
+        {
+            get { return this._underlying; }
+            set { this._underlying = value; }
+        }
+
        #endregion
 
-       #region Public Overrrides
-       //public override string ToString()
-       //{
-       //    return Name;
-       //}
+   
+           /* •—————————————————————————————————————————————•
+              | | Example Instrument                    | |
+              | |                                       | |
+              | | Name = LiborUSD1m3mSpread;            | |
+              | | AssetType = Rate;                     | |
+              | | ProductType = Swap;                   | |
+              | | Currency = USD;                       | |
+              | | AvailableFeatures = {Price,DVO1,Vol}; | |
+              | | BbgCode = USDLIBOR1m;                 | |
+              | | DqCode =  DqABC123;                   | |
+              | | Underlying = Libor1m                  | |
+              •—————————————————————————————————————————————• */
+          
+  }
 
-       #endregion
-
+    public class Featurelist
+    {
+        public static List<Features> GetFeatureList( AssetType assettype)
+        {
+            switch (assettype.ToString())
+            {
+                case "Swap":
+                    return new List<Features>(){ Features.Price, Features.Rate, Features.DVO1, };
+                case "Swaption":
+                    return new List<Features>(){ Features.Premium, Features.Rate, Features.Volatility, Features.DVO1, Features.Rate, Features.Gamma };
+                default:
+                    return null;
+            }
+        }
     }
 
 }

@@ -86,6 +86,9 @@
     <Reference Include="GalaSoft.MvvmLight.Platform">
       <HintPath>..\packages\MvvmLightLibs.5.1.1.0\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
     </Reference>
+    <Reference Include="MatrixLib">
+      <HintPath>..\..\..\..\Downloads\WpfMatrixDemo\WpfMatrixDemo\bin\Release\MatrixLib.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\Microsoft.Expression.Interactions.dll</HintPath>
     </Reference>
@@ -111,6 +114,8 @@
     <Reference Include="System.Reactive.Windows.Threading">
       <HintPath>..\packages\Rx-XAML.2.2.5\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Windows.Controls.DataVisualization.Toolkit">
       <HintPath>..\packages\DotNetProjectsWPFToolkit.4.0.0.0\lib\net40\System.Windows.Controls.DataVisualization.Toolkit.dll</HintPath>
     </Reference>
@@ -148,18 +153,35 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Assets\AutoCompleteSearch.cs" />
+    <Compile Include="Assets\CommandBehavior.cs" />
+    <Compile Include="Assets\CommandBehaviorBinding.cs" />
+    <Compile Include="Assets\DataGridHelperAttached.cs" />
+    <Compile Include="Assets\EventHandlerGenerator.cs" />
     <Compile Include="Assets\Identities.cs" />
     <Compile Include="Assets\BCrypt.cs" />
+    <Compile Include="Assets\SimpleCommand.cs" />
     <Compile Include="Assets\TabViewPersistence.cs" />
+    <Compile Include="Assets\TypeSwitch.cs" />
     <Compile Include="Common\ActionCommand.cs" />
     <Compile Include="Common\AutocompleteBoxBehavior.cs" />
     <Compile Include="Common\Interface1.cs" />
     <Compile Include="Common\TextBlockBehaviour.cs" />
     <Compile Include="Converters\EnumToStringConverter.cs" />
-    <Compile Include="Converters\ProductParamConverter.cs" />
+    <Compile Include="Converters\GeneralMultiStringDisplayConverter.cs" />
+    <Compile Include="Converters\StringToFeaturesConverter.cs" />
     <Compile Include="Converters\ProductSearchToSelectedProductConverter.cs" />
-    <Compile Include="Converters\ProductToNameConverter.cs" />
-    <Compile Include="Data\Class1.cs" />
+    <Compile Include="Converters\DateToTextConverter.cs" />
+    <Compile Include="Data\ExpandoMethods.cs" />
+    <Compile Include="Models\DataGetterModel.cs" />
+    <Compile Include="Models\Interfaces\IDataGetter.cs" />
+    <Compile Include="Models\Interfaces\IModelLocator.cs" />
+    <Compile Include="Models\ModelLocator.cs" />
+    <Compile Include="Models\RatesMatrixModel.cs" />
+    <Compile Include="Service References\FacadeService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\ProductSearchViewModel.cs" />
     <Compile Include="Data\Datatypes.cs" />
     <Compile Include="Data\Instrument Definition.cs" />
@@ -250,6 +272,34 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Service References\FacadeService\FacadeService.wsdl" />
+    <None Include="Service References\FacadeService\FacadeService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\FacadeService\FacadeService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\FacadeService\FacadeService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\FacadeService\FacadeService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\FacadeService\flc.FrontDoor.FacadeService.DataSourceDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\FacadeService\flc.FrontDoor.FacadeService.InstrumentDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\FacadeService\flc.FrontDoor.FacadeService.RatesMatrixDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\FacadeService\flc.FrontDoor.FacadeService.TickerDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\FacadeService\flc.FrontDoor.FacadeService.TimeSeriesDTO.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -271,7 +321,27 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\FacadeService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\FacadeService\FacadeService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\FacadeService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\FacadeService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\FacadeService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

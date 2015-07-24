@@ -11,30 +11,16 @@
     mc:Ignorable="d" 
     Height="300" 
     Width="250">
-    <UserControl.Resources>
-       
-        <ItemContainerTemplate x:Key="LastLegTemplate" >
-
-            <Button 
-                Focusable="False" 
-                
-                x:Name="SelectionButon" 
-                 
-                Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}" 
-                Content="{Binding Converter={StaticResource ProductToNameConverter}}" 
-                Click="_AttachSecurity"/>
-
-        </ItemContainerTemplate>
-
-    </UserControl.Resources>
+   
 
     <Grid>
-        
 
+        <ScrollViewer>
         <TreeView 
-            x:Name="MyTree" 
-            extra:UIElementAttached.IsBubblingMouseWheelEvents="True"
-            HorizontalAlignment="Center"
+            x:Name="MyTree"  
+            extra:UIElementAttached.IsBubblingMouseWheelEvents="True" VirtualizingPanel.IsVirtualizing="False"
+            HorizontalAlignment="Center" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         ScrollViewer.VerticalScrollBarVisibility="Disabled"
             ItemsSource="{Binding Currencies}">
 
 
@@ -65,8 +51,7 @@
                         </HierarchicalDataTemplate>
                         <HierarchicalDataTemplate 
                             DataType="{x:Type xy:ProductTypeViewModel}" 
-                            ItemTemplate="{StaticResource LastLegTemplate}" 
-                            ItemsSource="{Binding Products}" >
+                            ItemsSource="{Binding Underlyingsorted}" >
                             
                             <TextBlock Text="{Binding MyProductType}" SnapsToDevicePixels="True" Focusable="False" 
                                        Style="{StaticResource TreeViewTextStyle}"
@@ -74,13 +59,22 @@
 
 
                         </HierarchicalDataTemplate>
-
+                <HierarchicalDataTemplate
+                    DataType="{x:Type xy:UnderlyingViewModel}">
+                    <Button 
+                        Focusable="False" MinWidth="100"
+                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                        x:Name="SelectionButon" 
+                        Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}" 
+                        Content="{Binding Underlying }" 
+                        Click="_AttachSecurity"/>
+                </HierarchicalDataTemplate>
                     </TreeView.Resources>
 
 
                 </TreeView>
-    
 
-       
+        </ScrollViewer>
+
     </Grid>
 </UserControl>

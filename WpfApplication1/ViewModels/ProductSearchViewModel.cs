@@ -5,7 +5,7 @@ namespace flc.FrontDoor.ViewModels
     using System.Linq;
     using System.Text;
     using System.Windows;
-    using flc.FrontDoor.Data;
+    using FrontDoor.Data;
     using System.Windows.Controls;
     using System.Collections.Generic;
     using System.Text.RegularExpressions;
@@ -67,11 +67,10 @@ namespace flc.FrontDoor.ViewModels
         #endregion
 
         #region Search Logic
-        public static bool IsAutocompleteSuggestion(string
-        search, object productItem)
+        public static bool IsAutocompleteSuggestion(string search, object productItem)
         {
 
-            const string pattern = @"\b{0}";/* Regex Character to signify search in the beginning and end of each word */
+            const string pattern = @"\b(?i){0}";/* Regex Character to signify search in the beginning and end of each word */
             var result = false;
             var product = productItem as ProductSearchViewModel;
 
@@ -89,7 +88,7 @@ namespace flc.FrontDoor.ViewModels
                     product.CompareAssetTypes(regex);
                     product.CompareDescription(regex);
                     product.CompareBbgCode(regex);
-                    product.Finalize();
+                    product.FinalizeSearch();
 
                     return result = result || product.IsMatch;
 
@@ -163,7 +162,7 @@ namespace flc.FrontDoor.ViewModels
             }
         }
 
-        private void Finalize()
+        private void FinalizeSearch()
         {
             if (IsMatch == true)
             {

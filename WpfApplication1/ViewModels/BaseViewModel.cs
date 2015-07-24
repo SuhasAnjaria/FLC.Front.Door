@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.ComponentModel;
+using GalaSoft.MvvmLight.Messaging;
 
 
 namespace flc.FrontDoor.ViewModels
@@ -13,7 +14,8 @@ namespace flc.FrontDoor.ViewModels
     
    public abstract class BaseViewModel : NotifyDataErrorInfo<BaseViewModel>
     {
-       
+      public static Messenger _MyMessenger = new Messenger();
+      public static Messenger MyMessenger { get { return _MyMessenger; } }
 }
 
 }

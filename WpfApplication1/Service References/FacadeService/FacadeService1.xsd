@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://flcchicago:8699/FacadeService/FacadeService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/flcFacadeService" />
+  <xs:element name="GetInstruments">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetInstrumentsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/flcFacadeService" minOccurs="0" name="GetInstrumentsResult" nillable="true" type="q1:ArrayOfInstrumentDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTickerByMappingSrcToDest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="srcTickerName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="srcDataSource" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="destDataSource" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTickerByMappingSrcToDestResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/flcFacadeService" minOccurs="0" name="GetTickerByMappingSrcToDestResult" nillable="true" type="q2:TickerDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDataSources">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetDataSourcesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/flcFacadeService" minOccurs="0" name="GetDataSourcesResult" nillable="true" type="q3:ArrayOfDataSourceDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRatesMatrix">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="currency" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="productType" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="underlying" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="dataType" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="date" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetRatesMatrixResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/flcFacadeService" minOccurs="0" name="GetRatesMatrixResult" nillable="true" type="q4:RatesMatrixDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTimeSeries">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="flcTicker" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="field" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="fromDate" type="xs:dateTime" />
+        <xs:element minOccurs="0" name="toDate" type="xs:dateTime" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetTimeSeriesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/flcFacadeService" minOccurs="0" name="GetTimeSeriesResult" nillable="true" type="q5:TimeSeriesDTO" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

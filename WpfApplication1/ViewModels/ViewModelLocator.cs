@@ -7,8 +7,8 @@ namespace flc.FrontDoor.ViewModels
     using System.Text;
     using System.Threading.Tasks;
     using Autofac;
-    using flc.FrontDoor.Data;
-    class ViewModelLocator
+    using FrontDoor.Data;
+   public class ViewModelLocator
     {
         private readonly IContainer Container;
         public  ViewModelLocator()
@@ -19,7 +19,7 @@ namespace flc.FrontDoor.ViewModels
 
             containerbuilder.Register(c => new HierarchyViewModel()).SingleInstance();
             containerbuilder.Register(c => new SecuritySelectionViewModel());
-            containerbuilder.Register(c => new RatesViewModel());
+            containerbuilder.Register(c => new RatesViewModel()).SingleInstance();
             this.Container = containerbuilder.Build();
         }
 
@@ -54,6 +54,8 @@ namespace flc.FrontDoor.ViewModels
         
             } 
         }
+
+            
        
     }
 }

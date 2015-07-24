@@ -20,10 +20,11 @@
          
        
     </ResourceDictionary.MergedDictionaries>
-    <converters:ProductToNameConverter x:Key="ProductToNameConverter"/>
+    <converters:DateToTextConverter x:Key="DateToTextConverter"/>
+    <converters:GeneralMultiStringDisplayConverter x:Key="GeneralMultiStringDisplayConverter"/>
     <converters:EnumToStringConverter x:Key="EnumToStringConverter"/>
     <converters:ProductSearchToSelectedProductConverter x:Key="ProductSearchToSelectedProductConverter"/>
-    <converters:ProductParamConverter x:Key="ProductParamConverter"/>
+    <converters:StringToFeaturesConverter x:Key="StringToFeaturesConverter"/>
     <BitmapImage x:Key="Flc Icon" UriSource="C:\MSMF\FL\lightning31.png"/>
     
     

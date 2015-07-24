@@ -2,9 +2,10 @@
 namespace flc.FrontDoor.ViewModels
 {
     using System;
+    using Autofac;
     using System.Collections.Generic;
     using System.Linq;
-    using flc.FrontDoor.Views;
+    using flc.FrontDoor.FacadeService;
     using Framework.ComponentModel;
     using Framework.ComponentModel.Rules;
     using Framework.UI.Input;
@@ -12,7 +13,9 @@ namespace flc.FrontDoor.ViewModels
     using System.Threading.Tasks;
     using System.Windows.Controls;
     using flc.FrontDoor.Data;
-class SecuritySelectionViewModel:BaseViewModel
+    using flc.FrontDoor.Views;
+    using flc.FrontDoor.Models;
+public class SecuritySelectionViewModel:BaseViewModel
     {
 
         // Fields...
@@ -26,7 +29,14 @@ class SecuritySelectionViewModel:BaseViewModel
 
         	public SecuritySelectionViewModel ()
 	{
-       this.SearchList = HierarchyViewModel.products.Select(product=> new ProductSearchViewModel{Product=product,Name=product.Name}) ;
+        this.SearchList = ModelBuilder.ModelContainer.Resolve<Instrumentlist>().InstrumentMaster.Select(product => new ProductSearchViewModel
+        {
+            Product = product,
+            Name = product.Name,
+        });
+           
+
+      
                
 	}	 
 

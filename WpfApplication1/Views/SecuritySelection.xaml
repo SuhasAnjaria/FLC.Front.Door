@@ -25,11 +25,11 @@
                 Command="{Binding RatesViewModel.SelectedProductCommand, Mode=OneWay, Source={StaticResource ViewModelLocator}}" 
                 Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Top, Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}">
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <cmd:EventToCommand Command="{Binding RatesViewModel.SelectedAttributeCommand, Mode=OneWay, Source={StaticResource ViewModelLocator}}" CommandParameter="{Binding}" />
+                    <i:EventTrigger EventName="PreviewMouseDown">
+                        <cmd:EventToCommand Command="{Binding RatesViewModel.AttributeSelectedCommand, Mode=OneWay, Source={StaticResource ViewModelLocator}}"  CommandParameter="{Binding}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
-                
+
 
 
             </Button>
@@ -42,19 +42,20 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="0.2*"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="*" MinWidth="325"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="2*" MinWidth="600"/>
+            <ColumnDefinition Width="1.3*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
+
         <asset:AutoCompleteSearch DataContext="{Binding SecuritySelectionViewModel, Source={StaticResource ViewModelLocator}}"
                                   ItemsSource="{Binding SearchList}"
                                   MinimumPrefixLength="2"
@@ -82,6 +83,9 @@
                                        Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Top, Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}" />
                             <TextBlock Text="{Binding AssetType}"
                                        Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Top, Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}" />
+                            <TextBlock Text="{Binding BbgCode}"
+                                       Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Top, Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}" />
+
 
                         </StackPanel>
                     </StackPanel>
@@ -95,10 +99,10 @@
             HorizontalAlignment="Left" 
             Grid.Column="1" 
             Grid.Row="2" IsEnabled="{Binding ElementName=AutocompleteBox, Path=IsDropDownOpen, Converter={StaticResource InverseBoolConverter}}"
-            Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}" 
+            Margin="6,6,0,6" 
             ScrollViewer.CanContentScroll="True" 
             ScrollViewer.HorizontalScrollBarVisibility="Visible" 
-            ScrollViewer.VerticalScrollBarVisibility="Visible">
+            ScrollViewer.VerticalScrollBarVisibility="Visible" Width="303">
             <TextBlock
                 x:Name="SecuirtyTextBox"
                 Text="Instrument Type" 
@@ -108,33 +112,36 @@
             <local:GraphTreeView x:Name="SelectionTree" Height="436" Width="303" HorizontalAlignment="Center" />
 
         </StackPanel>
-       
-        <StackPanel 
-            HorizontalAlignment="Center" 
-            Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"
-            Grid.Column="3" Grid.Row="2" Width="150">
 
-            <TextBlock x:Name="SelectedProductBox"  
+        <StackPanel 
+            HorizontalAlignment="Stretch" 
+            Margin="163,6,156,6"
+            Grid.Column="3" Grid.Row="2" >
+
+            <TextBlock x:Name="SelectedProductBox"  TextAlignment="Center"  
                 Text="{Binding SelectedProduct, ElementName=SelectionTree,  NotifyOnSourceUpdated=True, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                Style="{StaticResource HeaderTextStyle}" HorizontalAlignment="Center" MinWidth="{Binding ElementName=SecurityTextBox, Path=ActualWidth}"
+                Style="{StaticResource HeaderTextStyle}" HorizontalAlignment="Stretch"  TextWrapping="NoWrap"
                 Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Top, Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}" 
                 >
                 <i:Interaction.Triggers>
                    <i:EventTrigger EventName="Unloaded" >
-                       <cmd:EventToCommand Command="{Binding RatesViewModel.SeletedProductCommand, Source={StaticResource ViewModelLocator}, Mode=OneWay, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding ElementName=SelectedProductBox, UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True}"/>
+                       <cmd:EventToCommand Command="{Binding RatesViewModel.ProductSelectedCommand, Source={StaticResource ViewModelLocator}, Mode=OneWay, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" CommandParameter="{Binding SelectedInstrument, ElementName=SelectionTree, UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True}"/>
                    </i:EventTrigger>
                 </i:Interaction.Triggers>
             </TextBlock>
-            <ListBox
-                     ItemsSource="{Binding SelectedInstrument.AvailableFeatures, ElementName=SelectionTree, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" 
-                     ItemTemplate="{StaticResource ListBoxTemplate}" MinWidth="70" HorizontalAlignment="Center"
-                     Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Top, Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}"
-                >
-               
+            <ListBox 
+                ItemsSource="{Binding SelectedInstrument.AvailableFeatures, ElementName=SelectionTree, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" 
+                ItemTemplate="{StaticResource ListBoxTemplate}" 
+                MinWidth="70" 
+                HorizontalAlignment="Center" 
+                Margin="{Binding Converter={StaticResource DoubleToThicknessConverter}, ConverterParameter='Left, Top, Right', RelativeSource={RelativeSource Self}, Path=(params:General.BoldPaddingValue), Mode=OneWay}">
+
 
             </ListBox>
 
 
         </StackPanel>
+        <metro:CommandButton Grid.Column="3" Header="Cancel" Margin="10,10,75,4" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                Click="CLose" Style="{StaticResource CancelCommandButtonStyle}"/>
     </Grid>
 </extra:OverlayWindow>

@@ -7,29 +7,308 @@
     xmlns:metro="http://schemas.codeplex.com/elysium" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+    xmlns:assets="clr-namespace:flc.FrontDoor.Assets"
     xmlns:Views="clr-namespace:flc.FrontDoor.Views" 
-   Height="768" Width="1024">
+    xmlns:common="clr-namespace:flc.FrontDoor.Common"
+    xmlns:controls="clr-namespace:Framework.UI.Controls;assembly=Framework.UI" 
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:cmd="http://www.galasoft.ch/mvvmlight"
+   Height="850" Width="1100">
     <Grid Margin="10,10,10,10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
-        <extra:AnimatedWrapPanel Grid.Row="1" >
-        <Button Content="Select Security" Click="SelectSecurity">
+        <Grid Grid.Row="1" MaxHeight="70" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Content="Select Security" Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}" Click="SelectSecurity"
+                        HorizontalAlignment="Center"  VerticalAlignment="Center"       >
+                
                
         </Button>
-            
-        </extra:AnimatedWrapPanel>
-        
-        <DataGrid Grid.Row="2" Height="500"  Width="950"
-               Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"
-              extra:UIElementAttached.IsBubblingMouseWheelEvents="True" AutoGenerateColumns="True" ItemsSource="{Binding RatesViewModel.A, Source={StaticResource ViewModelLocator}}"  >
-              
+
+            <DatePicker Grid.Column="1"  SelectedDateFormat="Short" SelectedDate="{Binding Path=RatesViewModel.Date, Source={StaticResource ViewModelLocator}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" VerticalAlignment="Stretch" HorizontalAlignment="Center" DisplayDateEnd="{x:Static sys:DateTime.Today}"  Style="{StaticResource TransparentDatePickerStyle}">
+                <DatePicker.Resources>
+                    <Style TargetType="DatePickerTextBox">
+                        <Setter Property="Text" Value="{Binding SelectedDate, RelativeSource={RelativeSource Self}, Converter={StaticResource DateToTextConverter}}"></Setter>
+                        <Setter Property="OpacityMask" Value="Gray"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsFocused}" Value="True">
+                                <Setter Property="Text" Value="{x:Null}"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DatePicker}, Path=SelectedDate, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" Value="{x:Static sys:DateTime.Today}">
+                                
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DatePicker}, Path=SelectedDate, NotifyOnSourceUpdated=True}" Value="{x:Static sys:DateTime.Now}">
+                                <Setter Property="Text" Value="LIVE"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </DatePicker.Resources>
+            </DatePicker>
+            <TextBlock Grid.Column="2" Grid.ColumnSpan="3"  VerticalAlignment="Center" DataContext="{StaticResource ViewModelLocator}"
+                       Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"
+                        Style="{StaticResource HeaderTextStyle}">
+                <TextBlock.Text>
+                    <MultiBinding Converter="{StaticResource GeneralMultiStringDisplayConverter}">
+                        <Binding Path="RatesViewModel.Instrument.Currency" NotifyOnSourceUpdated="True" UpdateSourceTrigger="PropertyChanged"/>
+                        <Binding Path="RatesViewModel.Instrument.Underlying" NotifyOnSourceUpdated="True" UpdateSourceTrigger="PropertyChanged"/>
+                        <Binding Path="RatesViewModel.Instrument.ProductType" NotifyOnSourceUpdated="True" UpdateSourceTrigger="PropertyChanged"/>
+                    </MultiBinding>
+                </TextBlock.Text>
+                <TextBlock.Resources>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TextBlock}}, Path=Text, Converter={StaticResource DateToTextConverter}}" Value="{x:Null}">
+                                <Setter Property="Text" Value="Text"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Resources>
+            </TextBlock>
+            <Button x:Name="HeightButton" Content="Refresh" Grid.Column="6" HorizontalContentAlignment="Center" Width="60" Panel.ZIndex="20" VerticalAlignment="Center"
+                     Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"/>
+            <ComboBox Grid.Column="5" DataContext="{Binding Source={StaticResource ViewModelLocator}}"
+                      Height="{Binding Path=ActualHeight,ElementName=HeightButton}"
+                      VerticalAlignment="Center" HorizontalAlignment="Left" MinWidth="90"
+                      Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"
+                      ItemsSource="{Binding RatesViewModel.Instrument.AvailableFeatures, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedValuePath="Features" SelectedItem="{Binding RatesViewModel.Feature, Mode=TwoWay, Converter={StaticResource StringToFeaturesConverter}, UpdateSourceTrigger=PropertyChanged}">
+            </ComboBox>
+
+        </Grid>
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Visible">
+        <DataGrid 
+                x:Name="Matgrid" 
+                Height="630"  ScrollViewer.CanContentScroll="True"
+                VerticalContentAlignment="Center" 
+                HorizontalContentAlignment="Center" 
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Center" 
                
+                DataContext="{Binding RatesViewModel, Source={StaticResource ViewModelLocator}}" 
+                SelectionUnit="Cell" 
+                SelectedCellsChanged="Matgrid_SelectedCellsChanged" 
+                AutoGenerateColumns="False" 
+                HeadersVisibility="All" 
+                CanUserSortColumns="True" 
+                CanUserReorderColumns="False" 
+                Sorting="SortButtonbug" 
+                ItemsSource="{Binding MatrixArgs, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" 
+                Visibility="{Binding RatesViewModel.DoesGridDisplay, Source={StaticResource ViewModelLocator}, Converter={StaticResource BoolToVisibilityConverter},NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" 
+                Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}" 
+                extra:UIElementAttached.IsBubblingMouseWheelEvents="True">
             
+            <DataGrid.RowHeaderStyle>
+                <Style TargetType="DataGridRowHeader">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Setter Property="MinWidth" Value="40"/>
+                    <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource TransparentBrush}"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Foreground" Value="{StaticResource ContrastBrush}"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Setter Property="Padding" Value="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"/>
+                    <Setter Property="SeparatorBrush" Value="{StaticResource ContrastBrush}"/>
+                    <Setter Property="SeparatorVisibility" Value="Visible"/>
+                    <Setter Property="FontStyle" Value="Normal"/>
+                    <Setter Property="FontWeight" Value="Normal"/>
+                    <Setter Property="FontSize" Value="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.TextFontSize), Mode=OneWay}"/>
+                    <Setter Property="FocusVisualStyle" Value="{StaticResource {x:Static SystemParameters.FocusVisualStyleKey}}"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="SeparatorBrush" Value="{StaticResource ContrastBrush}"/>
+                    <Setter Property="Content" Value="{Binding Path=DataContext.RowHeader, RelativeSource={RelativeSource AncestorType=DataGridRow}}"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                                <ControlTemplate>
+                                    <Grid   assets:CommandBehavior.Event="MouseDown" assets:CommandBehavior.Command="{Binding RatesViewModel.GridSelectionChangedCommand, Source={StaticResource ViewModelLocator}}"
+                                      assets:CommandBehavior.CommandParameter="{Binding Path=Text,ElementName=HeaderRow}"    >
+                                    <Grid.RowDefinitions>
+                                     </Grid.RowDefinitions>
+                                    <controls:BorderFix Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                
+                                Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                    </controls:BorderFix>
+                                        <TextBlock Grid.Row="1" x:Name="HeaderRow"
+                                    Foreground="{TemplateBinding Foreground}" 
+                                    Background="{TemplateBinding Background}" 
+                                    Padding="{TemplateBinding Padding}" 
+                                    IsEnabled="False" 
+                                    HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                    Text="{Binding Path=DataContext.RowHeader, RelativeSource={RelativeSource AncestorType=DataGridRow}}">
+
+                                        </TextBlock>
+                                    
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{StaticResource ForegroundBrush}"/>
+                                        <Setter Property="BorderBrush" Value="{StaticResource ContrastBrush}"/>
+                                        <Setter Property="Foreground" Value="{StaticResource BackgroundBrush}"/>
+                                    </Trigger>
+
+
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+
+                        </Setter.Value>
+                    </Setter>
+                    
+                   
+                    <Style.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource LowlightBrush}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource ContrastBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource BackgroundBrush}"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+
+            </DataGrid.RowHeaderStyle>
+            
+            <DataGrid.CellStyle>
+                <Style TargetType="DataGridCell">
+                    
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="VerticalAlignment" Value="Center"/>                   
+                    <Setter Property="ToolTip">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ToolTip">
+                                <TextBlock x:Name="MyTooltip" Text="ABDC">
+                                    
+                                </TextBlock>
+                            </ControlTemplate>
+                        </Setter.Value>
+                        
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                             
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.CellStyle>
+
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="{x:Type DataGridColumnHeader}">
+                    
+                    <Setter Property="Background" Value="{StaticResource AccentBrush}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource TransparentBrush}"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Command" Value="{Binding RatesViewModel.GridSelectionChangedCommand, Source={StaticResource ViewModelLocator}}"/>
+                    <Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}"/>
+                    <Setter Property="Foreground" Value="{StaticResource ContrastBrush}"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="Padding" Value="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"/>
+                    <Setter Property="SeparatorBrush" Value="{StaticResource ContrastBrush}"/>
+                    <Setter Property="SeparatorVisibility" Value="Visible"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                                <Grid>                      
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <controls:BorderFix Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                IsHitTestVisible="{TemplateBinding CanUserSort}" 
+                                Padding="{TemplateBinding Padding}" >
+                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                    </controls:BorderFix>
+                                    <Path x:Name="PART_SortIcon"
+                              Data="F1 M -5.215,0.0L 5.215,0.0L 0,6.099L -5.215,0.0 Z "
+                              Fill="{TemplateBinding Foreground}"
+                              HorizontalAlignment="Right"
+                              Opacity="0"
+                              Margin="{TemplateBinding Padding}"
+                              Stretch="Uniform"
+                              Width="8">
+                                        <Path.RenderTransform>
+                                            <ScaleTransform CenterX="4"
+                                                CenterY="2.5"
+                                                ScaleX="1"
+                                                ScaleY="1"/>
+                                        </Path.RenderTransform>
+                                    </Path>
+                                    <Rectangle Grid.Column="1"
+                                   Fill="{TemplateBinding SeparatorBrush}"
+                                   Visibility="{TemplateBinding SeparatorVisibility}" 
+                                   Width="1"/>
+                                    <Thumb x:Name="PART_LeftHeaderGripper" 
+                               Grid.ColumnSpan="2"
+                               HorizontalAlignment="Left" 
+                               Style="{StaticResource ColumnHeaderGripperStyle}"/>
+                                    <Thumb x:Name="PART_RightHeaderGripper" 
+                               Grid.ColumnSpan="2"
+                               HorizontalAlignment="Right" 
+                               Style="{StaticResource ColumnHeaderGripperStyle}"/>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="SortDirection" Value="Ascending">
+                                        <Setter Property="Opacity" TargetName="PART_SortIcon" Value="1"/>
+                                        <Setter Property="RenderTransform" TargetName="PART_SortIcon">
+                                            <Setter.Value>
+                                                <ScaleTransform CenterX="4"
+                                                    CenterY="2.5"
+                                                    ScaleX="1"
+                                                    ScaleY="-1"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <Trigger Property="SortDirection" Value="Descending">
+                                        <Setter Property="Opacity" TargetName="PART_SortIcon" Value="1"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource ForegroundBrush}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource ContrastBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource BackgroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource LowlightBrush}"/>
+                            <Setter Property="BorderBrush" Value="{StaticResource ContrastBrush}"/>
+                            <Setter Property="Foreground" Value="{StaticResource BackgroundBrush}"/>
+                        </Trigger>
+                    </Style.Triggers>
+
+                </Style>
+
+            </DataGrid.ColumnHeaderStyle>
+
+            <DataGrid.Resources>
+               
+            </DataGrid.Resources>
         </DataGrid>
-        
+        </ScrollViewer>
+
+
     </Grid>
 </UserControl>

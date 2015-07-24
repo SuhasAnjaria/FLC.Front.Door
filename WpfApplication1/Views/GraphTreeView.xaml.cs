@@ -21,6 +21,7 @@ namespace flc.FrontDoor.Views
     using flc.FrontDoor.ViewModels;
     using System.ComponentModel;
     using Framework.UI.Controls;
+    using flc.FrontDoor;
     /// <summary>
     /// Interaction logic for GraphTreeView.xaml
     /// </summary>
@@ -39,9 +40,11 @@ namespace flc.FrontDoor.Views
         {
             
                this.SelectedProduct = ((Button)sender).Content.ToString();
-                this.SelectedInstrument = HierarchyViewModel.products.FirstOrDefault(o => o.Name == this.SelectedProduct);
-                
-            }
+               var Boo = (Button)sender;
+               var g = (ContentPresenter)Boo.TemplatedParent;
+               var q = (UnderlyingViewModel)g.Content;
+               this.SelectedInstrument = q.Products.First();
+         }
 
 
         public string SelectedProduct
@@ -53,6 +56,7 @@ namespace flc.FrontDoor.Views
                 
                 {
                  SetValue(SelectedProductProperty, value);
+                 var B = MyTree.Items.CurrentItem;
                 }
                  
             
@@ -72,6 +76,8 @@ namespace flc.FrontDoor.Views
         // Using a DependencyProperty as the backing store for SelectedInstrument.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectedInstrumentProperty =
             DependencyProperty.Register("SelectedInstrument", typeof(Instrument), typeof(GraphTreeView), null);
+
+       
 
         
         

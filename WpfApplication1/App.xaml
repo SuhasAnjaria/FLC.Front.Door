@@ -7,7 +7,8 @@
     xmlns:extra="http://schemas.extra.com/ui" 
     xmlns:params="http://schemas.codeplex.com/elysium/params" 
     xmlns:metro="http://schemas.codeplex.com/elysium" 
-    xmlns:VM="clr-namespace:flc.FrontDoor.ViewModels"
+    xmlns:VM="clr-namespace:flc.FrontDoor"
+    xmlns:VMS="clr-namespace:flc.FrontDoor.ViewModels"
     StartupUri="\Views\FrontDoor.xaml" 
     Theme="Light">             
           
@@ -21,7 +22,10 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/ControlsDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            <VM:ViewModelLocator x:Key="ViewModelLocator"/>
+            <!-- <VM:ViewModelLocator x:Key="ViewModelLocator"/>-->
+            <x:StaticExtension  Member="VM:App.VMLocator" x:Key="ViewModelLocator"/>
+
+
         </ResourceDictionary>
        
    

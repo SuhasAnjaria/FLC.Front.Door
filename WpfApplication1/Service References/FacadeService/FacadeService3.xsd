@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/flcFacadeService" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/flcFacadeService" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://flcchicago:8699/FacadeService/FacadeService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="ArrayOfInstrumentDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="InstrumentDTO" nillable="true" type="tns:InstrumentDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfInstrumentDTO" nillable="true" type="tns:ArrayOfInstrumentDTO" />
+  <xs:complexType name="InstrumentDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AssetType" nillable="true" type="xs:string" />
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="BloombergTickers" nillable="true" type="q1:ArrayOfstring" />
+      <xs:element minOccurs="0" name="Currency" nillable="true" type="xs:string" />
+      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DataQueryTickers" nillable="true" type="q2:ArrayOfstring" />
+      <xs:element minOccurs="0" name="FLCTicker" nillable="true" type="xs:string" />
+      <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Fields" nillable="true" type="q3:ArrayOfstring" />
+      <xs:element minOccurs="0" name="ProductType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Underlying" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="InstrumentDTO" nillable="true" type="tns:InstrumentDTO" />
+  <xs:complexType name="FacadeFault">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FaultMessage" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FacadeFault" nillable="true" type="tns:FacadeFault" />
+  <xs:complexType name="TickerDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DataSource" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TickerDTO" nillable="true" type="tns:TickerDTO" />
+  <xs:complexType name="ArrayOfDataSourceDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="DataSourceDTO" nillable="true" type="tns:DataSourceDTO" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfDataSourceDTO" nillable="true" type="tns:ArrayOfDataSourceDTO" />
+  <xs:complexType name="DataSourceDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="DataSourceDTO" nillable="true" type="tns:DataSourceDTO" />
+  <xs:complexType name="RatesMatrixDTO">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Currency" nillable="true" type="xs:string" />
+      <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="DataRowList" nillable="true" type="q4:ArrayOfstring" />
+      <xs:element minOccurs="0" name="Date" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Field" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ProductType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Underlying" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Units" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="RatesMatrixDTO" nillable="true" type="tns:RatesMatrixDTO" />
+  <xs:complexType name="TimeSeriesDTO">
+    <xs:sequence>
+      <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Dates" nillable="true" type="q5:ArrayOfdateTime" />
+      <xs:element minOccurs="0" name="Field" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Ticker" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Units" nillable="true" type="xs:string" />
+      <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Values" nillable="true" type="q6:ArrayOfdouble" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TimeSeriesDTO" nillable="true" type="tns:TimeSeriesDTO" />
+</xs:schema>

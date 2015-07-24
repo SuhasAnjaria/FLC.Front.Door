@@ -1,85 +1,168 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using flc.FrontDoor.ViewModels;
-using flc.FrontDoor.Data;
-using GalaSoft.MvvmLight.Command;
-using System.Windows.Input;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Windows.Data;
-namespace flc.FrontDoor.ViewModels
-
+﻿namespace flc.FrontDoor.ViewModels
 {
-    interface IParameterLoader
+
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using flc.FrontDoor.Assets;
+    using FrontDoor.Data;
+    using flc.FrontDoor.Models;
+    using GalaSoft.MvvmLight.Command;
+    using System.Collections.ObjectModel;
+    using System.Windows.Controls.Primitives;
+    using Autofac;
+
+ public class RatesViewModel : BaseViewModel
     {
-         ObservableCollection<RatesViewModel> GetData();
-    }
 
-    class RatesViewModel:BaseViewModel
-    {
-        private RelayCommand<object> _selectedAtrributeCommand;
-        public RelayCommand<object> _selectedProductCommand;
-       
+        public delegate void NewHandled(RatesViewModel sender, GridEventArgs e);
+        public event NewHandled GridDataAdded;
 
-        public ICommand SelectedAttributeCommand
-        {
-            get {
-                if(_selectedAtrributeCommand == null)
-                {
-                _selectedAtrributeCommand = new RelayCommand<object>(AttributeSelected);
-                return this._selectedAtrributeCommand;
-                }
-                else
-                {
-                    return this._selectedAtrributeCommand;
-                }
-            }
-            
-        }
-
+        private DateTime _date;
+        private RelayCommand<object> _productSelectedCommand;
+        private RelayCommand<object> _attributeSelectedCommand;
+        private RelayCommand<object> _gridSelectionChangedCommand;
         
-        public ICommand SelectedProductCommand
+        public RelayCommand<object> ProductSelectedCommand
         {
             get
             {
-                if(_selectedProductCommand == null){
-                _selectedProductCommand = new RelayCommand<object>(ProductSelected);
-                return  this._selectedProductCommand;
+                if (this._productSelectedCommand == null)
+                {
+                    this._productSelectedCommand = new RelayCommand<object>(AssignProduct);
+                    return this._productSelectedCommand;
                 }
-                else{
-                    return this._selectedProductCommand;
+                else
+                {
+                    return this._productSelectedCommand;
                 }
+
+            }
+
+        }
+        public RelayCommand<object> AttributeSelectedCommand
+        {
+            get
+            {
+                if (this._attributeSelectedCommand == null)
+                {
+                    this._attributeSelectedCommand = new RelayCommand<object>(AssignAttribute);
+                    return this._attributeSelectedCommand;
+                }
+
+                return _attributeSelectedCommand;
+            }
+        }
+        public RelayCommand<object> GridSelectionChangedCommand
+        {
+            get
+            {
+                if (this._gridSelectionChangedCommand == null)
+                {
+                    this._gridSelectionChangedCommand = new RelayCommand<object>(GridChanged);
+                    return this._gridSelectionChangedCommand;
+                }
+
+                return this._gridSelectionChangedCommand;
             }
         }
 
-        private void ProductSelected(object obj)
+        // Fields...
+
+        private string _feature = null;
+        private Instrument _selectedInstrument;
+        private bool _doesGridDisplay;
+        private ObservableCollection<dynamic> _matrixArgs = new ObservableCollection<dynamic>();
+
+        public Instrument Instrument
         {
-            var A = (TextBlock)obj;
-           
-            
+            get { return _selectedInstrument; }
+            set { this.SetProperty(ref this._selectedInstrument, value); }
         }
-
-        private void AttributeSelected(object param)
+        public string Feature
         {
-            var B = param;          
+            get { return this._feature; }
+            set { this.SetProperty(ref this._feature, value); }
         }
-
-
-        public ICollectionView A { get; set; }
-        public RatesViewModel()
+        private void AssignAttribute(object obj)
         {
-             var B = new FullGrid{
-                new GridRow{
-                    new GridPoint{GridHeader ="ABC", Value=1},},
-                    new GridRow{new GridPoint{GridHeader="AC", Value=1}}
+            if (obj != null)
+            {
+                Feature = obj.ToString();
+                this.DoesGridDisplay = true;
+
+            }
+        }
+        private void AssignProduct(object obj)
+        {
+            if (obj != null)
+            {
                 
-            };
-             this.A = CollectionViewSource.GetDefaultView(B);
+                Instrument = (Instrument)obj;
+                GridDataAdded(this, new GridEventArgs(this.Instrument.Currency.ToString(),
+                    this.Instrument.Underlying, this.Feature, this.Date));
+            }
         }
         
+        private void GridChanged(object obj)
+        {
+            TypeSwitch.Do(obj,
+                TypeSwitch.Case<string>((x) =>
+                {
+                   //TODO:
+                }),
+                TypeSwitch.Case<DataGridColumnHeader>(x=>
+                {
+                   //TODO:
+                }));
+        }
+        public bool DoesGridDisplay
+        {
+            get { return _doesGridDisplay; }
+            set { this.SetProperty(ref this._doesGridDisplay, value); }
+        }
+
+        public DateTime Date
+        {
+            get { return _date; }
+            set { this.SetProperty(ref this._date, value); }
+        }
+
+        public ObservableCollection<dynamic> MatrixArgs
+        {
+            get { return _matrixArgs; }
+            set { this.SetProperty(ref this._matrixArgs, value); }
+        }
+
+        public RatesViewModel()
+        {
+            var A = Models.ModelBuilder.ModelContainer.Resolve<RatesMatrixModel>();
+            this.GridDataAdded += A.RatesViewModel_GridDataAdded;
+
+            this.Date = DateTime.Today;
+          
+            
+
+
+        }
+
+        public class GridEventArgs
+        {
+            public string Underlying { get; set; }
+            public string Currency { get; set; }
+            public DateTime Date { get; set; }
+            public string Feature { get; set; }
+            /// <summary>
+            /// Initializes a new instance of the GridEventArgs class.
+            /// </summary>
+            public GridEventArgs(string currency,string underlying, string feature, DateTime date)
+            {
+                Currency = currency;
+                Underlying = underlying;
+                Date = date;
+                Feature = feature;
+            }
+        }
+
     }
 }
