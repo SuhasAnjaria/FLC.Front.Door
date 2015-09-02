@@ -58,36 +58,56 @@
                     </Style>
                 </DatePicker.Resources>
             </DatePicker>
-            <TextBlock Grid.Column="2" Grid.ColumnSpan="3"  VerticalAlignment="Center" DataContext="{StaticResource ViewModelLocator}"
+            <TextBlock x:Name="MyTextBlock" Grid.Column="2" Grid.ColumnSpan="3"  VerticalAlignment="Center" DataContext="{StaticResource ViewModelLocator}"
                        Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"
-                        Style="{StaticResource HeaderTextStyle}">
-                <TextBlock.Text>
-                    <MultiBinding Converter="{StaticResource GeneralMultiStringDisplayConverter}">
-                        <Binding Path="RatesViewModel.Instrument.Currency" NotifyOnSourceUpdated="True" UpdateSourceTrigger="PropertyChanged"/>
-                        <Binding Path="RatesViewModel.Instrument.Underlying" NotifyOnSourceUpdated="True" UpdateSourceTrigger="PropertyChanged"/>
-                        <Binding Path="RatesViewModel.Instrument.ProductType" NotifyOnSourceUpdated="True" UpdateSourceTrigger="PropertyChanged"/>
-                    </MultiBinding>
-                </TextBlock.Text>
+                       HorizontalAlignment="Center"> 
                 <TextBlock.Resources>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type TextBlock}}, Path=Text, Converter={StaticResource DateToTextConverter}}" Value="{x:Null}">
-                                <Setter Property="Text" Value="Text"/>
-                            </DataTrigger>
-                        </Style.Triggers>
+                    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource HeaderTextStyle}">
+                        <Setter Property="Text">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource GeneralMultiStringDisplayConverter}" TargetNullValue="Rates Matrix">
+                                    <Binding Path="RatesViewModel.Instrument.Currency" NotifyOnSourceUpdated="True" UpdateSourceTrigger="PropertyChanged"/>
+                                    <Binding Path="RatesViewModel.Instrument.Underlying" NotifyOnSourceUpdated="True" UpdateSourceTrigger="PropertyChanged"/>
+                                    <Binding Path="RatesViewModel.Instrument.ProductType" NotifyOnSourceUpdated="True" UpdateSourceTrigger="PropertyChanged"/>
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                        
                     </Style>
                 </TextBlock.Resources>
             </TextBlock>
-            <Button x:Name="HeightButton" Content="Refresh" Grid.Column="6" HorizontalContentAlignment="Center" Width="60" Panel.ZIndex="20" VerticalAlignment="Center"
-                     Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"/>
-            <ComboBox Grid.Column="5" DataContext="{Binding Source={StaticResource ViewModelLocator}}"
+            <Button x:Name="HeightButton" Content="Refresh" Grid.Column="7" HorizontalContentAlignment="Center" Width="60" Panel.ZIndex="20" VerticalAlignment="Center"
+                     Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"
+                    Command="{Binding RatesViewModel.RefreshGridCommand, Source={StaticResource ViewModelLocator}}"/>
+            <StackPanel Grid.Column="5" Grid.ColumnSpan="2" Orientation="Horizontal"  Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}">
+                <ComboBox x:Name="FeaturesComboBox" DataContext="{Binding Source={StaticResource ViewModelLocator}}"
                       Height="{Binding Path=ActualHeight,ElementName=HeightButton}"
+                      Style="{StaticResource TransparentComboBoxStyle}" 
                       VerticalAlignment="Center" HorizontalAlignment="Left" MinWidth="90"
                       Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"
                       ItemsSource="{Binding RatesViewModel.Instrument.AvailableFeatures, UpdateSourceTrigger=PropertyChanged}"
                       SelectedValuePath="Features" SelectedItem="{Binding RatesViewModel.Feature, Mode=TwoWay, Converter={StaticResource StringToFeaturesConverter}, UpdateSourceTrigger=PropertyChanged}">
-            </ComboBox>
-
+                </ComboBox>
+                <ComboBox  Height="{Binding Path=ActualHeight,ElementName=HeightButton}"
+                      VerticalAlignment="Center" HorizontalAlignment="Left" SelectedIndex="1"
+                      VerticalContentAlignment="Center"     
+                      Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}">
+                    <ComboBoxItem>Call/Payer</ComboBoxItem>
+                    <ComboBoxItem>Put/Reciever</ComboBoxItem>
+                    <ComboBox.Resources>
+                        <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource TransparentComboBoxStyle}">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                            <Style.Triggers>
+                                
+                                    <DataTrigger Binding="{Binding ElementName=FeaturesComboBox, Path=SelectedItem}" Value="Premium">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                
+                            </Style.Triggers>
+                        </Style>
+                    </ComboBox.Resources>
+                </ComboBox>
+            </StackPanel>
         </Grid>
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Visible">
         <DataGrid 

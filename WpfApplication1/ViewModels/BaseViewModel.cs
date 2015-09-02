@@ -9,13 +9,14 @@ using System.ComponentModel;
 using GalaSoft.MvvmLight.Messaging;
 
 
+
 namespace flc.FrontDoor.ViewModels
 {
     
-   public abstract class BaseViewModel : NotifyDataErrorInfo<BaseViewModel>
+   public abstract class BaseViewModel : NotifyPropertyChanges
     {
-      public static Messenger _MyMessenger = new Messenger();
-      public static Messenger MyMessenger { get { return _MyMessenger; } }
+      //public static Messenger _MyMessenger = new Messenger();
+      //public static Messenger MyMessenger { get { return _MyMessenger; } }
 }
 
 }

@@ -43,7 +43,8 @@ namespace flc.FrontDoor.Views
                var Boo = (Button)sender;
                var g = (ContentPresenter)Boo.TemplatedParent;
                var q = (UnderlyingViewModel)g.Content;
-               this.SelectedInstrument = q.Products.First();
+               this.SelectedInstrument = q.Products.OrderBy(prod=> prod.AvailableFeatures.Count)
+                   .Last();
          }
 
 

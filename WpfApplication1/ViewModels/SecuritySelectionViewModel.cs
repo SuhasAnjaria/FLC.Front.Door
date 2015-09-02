@@ -33,7 +33,7 @@ public class SecuritySelectionViewModel:BaseViewModel
         {
             Product = product,
             Name = product.Name,
-        });
+        }) as IEnumerable<ProductSearchViewModel>;
            
 
       

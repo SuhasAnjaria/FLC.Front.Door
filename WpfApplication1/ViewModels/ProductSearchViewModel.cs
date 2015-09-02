@@ -11,6 +11,10 @@ namespace flc.FrontDoor.ViewModels
     using System.Text.RegularExpressions;
     using System.Windows.Interactivity;
     using System.Globalization;
+    using System.Threading.Tasks;
+    using Framework.UI.Input;
+    using flc.FrontDoor.Models;
+    using Autofac;
 /// <summary>
     /// The Logic to search the Master Product List
     /// </summary>
@@ -22,10 +26,16 @@ namespace flc.FrontDoor.ViewModels
         private string _assettype;
         private string _name;
         private string _features;
-        private string _bbgCode;
+        private List<string> _bbgCode;
+
+        public static IEnumerable<ProductSearchViewModel> _searchlist;
+       
         #endregion
 
         #region Public Properties
+ 
+
+        
         public Instrument Product { get; set; }
         public bool IsMatch { get; set; }
 
@@ -53,7 +63,7 @@ namespace flc.FrontDoor.ViewModels
             set { if (_description != value) { _description = value; OnPropertyChanged("Description"); } }
         }
 
-        public string BbgCode
+        public List<string> BbgCode
         {
             get { return _bbgCode; }
             set { if (_bbgCode != value) { _bbgCode = value; OnPropertyChanged("BbgCode"); } }
@@ -78,27 +88,43 @@ namespace flc.FrontDoor.ViewModels
 
             if (product != null)
             {
-                foreach (var part in parts)
-                {
-                    product.IsMatch = false;
-                    var regex = new Regex(string.Format(part));
-                    product.InitializeSearch();
-                    product.CompareName(regex);
-                    product.CompareFeatures(regex);
-                    product.CompareAssetTypes(regex);
-                    product.CompareDescription(regex);
-                    product.CompareBbgCode(regex);
-                    product.FinalizeSearch();
+                Parallel.ForEach(parts, (part) =>
+                    {
+                        product.IsMatch = false;
+                        var regex = new Regex(string.Format(part));
+                        product.InitializeSearch();
+                        product.CompareName(regex);
+                        product.CompareFeatures(regex);
+                        product.CompareAssetTypes(regex);
+                        product.CompareDescription(regex);
+                        // product.CompareBbgCode(regex);
+                        product.FinalizeSearch();
 
-                    return result = result || product.IsMatch;
+                       
 
-                }
+
+                    });
+                                 
+                
 
             }
             return result;
         }
 
-
+        static ProductSearchViewModel()
+        {
+            
+            _searchlist  = ModelBuilder.ModelContainer.Resolve<Instrumentlist>().InstrumentMaster.Select(product => new ProductSearchViewModel
+        {
+           Product = product,
+           Name = product.Name,
+           AssetType = product.AssetType.ToString(),
+           Currency = product.Currency.ToString(),
+           Features = product.AvailableFeatures.ToString(),
+           BbgCode = product.BbgCode
+            
+        }) as IEnumerable<ProductSearchViewModel>;
+        }
 
         private void InitializeSearch()
         {
@@ -118,10 +144,10 @@ namespace flc.FrontDoor.ViewModels
         {
             if (Product.AssetType != null)
             {
-                var A = Product.AssetType.ToString();
-                if (regex.IsMatch(A))
+                var a = Product.AssetType.ToString();
+                if (regex.IsMatch(a))
                 {
-                    AssetType = String.Format(CultureInfo.InvariantCulture, "{0}", Product.AssetType);
+                    AssetType = string.Format(CultureInfo.InvariantCulture, "{0}", Product.AssetType);
                     IsMatch = true;
                 }
             }
@@ -133,7 +159,7 @@ namespace flc.FrontDoor.ViewModels
             {
                 if (regex.IsMatch(Product.AvailableFeatures.ToString()))
                 {
-                    Features = String.Format(CultureInfo.InvariantCulture, "{0}", Product.AvailableFeatures.ToString());
+                    Features = string.Format(CultureInfo.InvariantCulture, "{0}", Product.AvailableFeatures.ToString());
                     IsMatch = true;
                 }
             }
@@ -150,17 +176,17 @@ namespace flc.FrontDoor.ViewModels
             }
         }
 
-        private void CompareBbgCode(Regex regex)
-        {
-            if (Product.BbgCode != null)
-            {
-                if (regex.IsMatch(Product.BbgCode))
-                {
-                    BbgCode = Product.BbgCode;
-                    IsMatch = true;
-                }
-            }
-        }
+        //private void CompareBbgCode(Regex regex)
+        //{
+        //    if (Product.BbgCode != null)
+        //    {
+        //        if (regex.IsMatch(Product.BbgCode))
+        //        {
+        //            BbgCode = Product.BbgCode;
+        //            IsMatch = true;
+        //        }
+        //    }
+        //}
 
         private void FinalizeSearch()
         {
@@ -175,5 +201,31 @@ namespace flc.FrontDoor.ViewModels
             }
         }
         #endregion
+
+        public static void Populating(object sender, PopulatingEventArgs e)
+        {
+            var A =System.Diagnostics.Stopwatch.StartNew();
+            e.Cancel = true;
+            
+            var searchstring = e.Parameter;
+            
+            var Box = e.Source as AutoCompleteBox;
+            var FilteredList = new List<ProductSearchViewModel>();
+
+            Parallel.ForEach(_searchlist, (instrument) =>
+                {
+                    if(instrument.Name.Contains(searchstring))
+                    {
+                        
+                        lock(FilteredList)
+                        {
+                            FilteredList.Add(instrument);
+                        }
+                    }
+                });
+            Box.ItemsSource = FilteredList;
+            Box.PopulateComplete();
+            Console.WriteLine(A.Elapsed);
+        }
     }
 }

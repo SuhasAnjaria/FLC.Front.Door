@@ -9,14 +9,13 @@
     xmlns:metro="http://schemas.codeplex.com/elysium" 
     xmlns:VM="clr-namespace:flc.FrontDoor"
     xmlns:VMS="clr-namespace:flc.FrontDoor.ViewModels"
-    StartupUri="\Views\FrontDoor.xaml" 
-    Theme="Light">             
+    StartupUri="\Views\ChartingTool.xaml" ShutdownMode="OnLastWindowClose"
+    Theme = "Light">             
           
-        <!--   StartupUri="\Views\LoginView.xaml"
-                          Theme="Light"-->
-                          
-                          
-                          
+       
+    <!--  StartupUri="\Views\FrontDoor.xaml" -->
+
+
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

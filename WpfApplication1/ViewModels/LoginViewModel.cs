@@ -17,7 +17,7 @@ namespace flc.FrontDoor.ViewModels
     using FrontDoor.Assets;
     using System.Windows.Controls;
     using System.Security;
-internal class LoginViewModel : BaseViewModel
+internal class LoginViewModel : NotifyDataErrorInfo<LoginViewModel>
     {
 
         #region PrivateMembers
@@ -104,7 +104,7 @@ internal class LoginViewModel : BaseViewModel
         }
         static LoginViewModel()
         {
-            Rules.Add(new DelegateRule<BaseViewModel>("Username", "Username cannot be empty", x =>
+            Rules.Add(new DelegateRule<LoginViewModel>("Username", "Username cannot be empty", x =>
             {
                 /*<interaction logic> 
                  Casting Base class to derived class and implementing validation rule
@@ -112,7 +112,7 @@ internal class LoginViewModel : BaseViewModel
                 var cast = (LoginViewModel)x; return !string.IsNullOrWhiteSpace(cast.Username);
             }));
 
-            Rules.Add(new DelegateRule<BaseViewModel>("Password", "Password cannot be empty", x =>
+            Rules.Add(new DelegateRule<LoginViewModel>("Password", "Password cannot be empty", x =>
                  {
                      /*<interaction logic> 
                       Casting Base class to derived class and implementing validation rule

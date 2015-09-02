@@ -6,20 +6,25 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interactivity;
 using flc.FrontDoor.ViewModels;
+using flc.FrontDoor.Assets;
 namespace flc.FrontDoor.Common
 {
     /// <summary>
     /// /Behavior for Autocompletebox suggestion handling
     /// </summary>
-    public class AutocompleteBoxBehavior:Behavior<AutoCompleteBox>
+    public class AutocompleteBoxBehavior:Behavior<AutoCompleteSearch>
     {
          
                   protected override void OnAttached()
             {
                 base.OnAttached();
 
-                AssociatedObject.FilterMode = AutoCompleteFilterMode.Custom;
-                AssociatedObject.ItemFilter = ProductSearchViewModel.IsAutocompleteSuggestion;
+                AssociatedObject.FilterMode = AutoCompleteFilterMode.None;
+                AssociatedObject.Populating += ProductSearchViewModel.Populating;
+               // AssociatedObject.ItemFilter += ReturnTrue;
+                
+                
+
 
                 AssociatedObject.LostFocus += OnFocusLost;
             }
@@ -29,6 +34,8 @@ namespace flc.FrontDoor.Common
                 AssociatedObject.Text = "";
             }
 
+       
+
             protected override void OnDetaching()
             {
                 base.OnDetaching();
@@ -37,6 +44,10 @@ namespace flc.FrontDoor.Common
                 AssociatedObject.ItemFilter = null;
 
                 AssociatedObject.LostFocus -= OnFocusLost;
+            }
+            private bool ReturnTrue(string search, object item)
+            {
+                return true;
             }
         }
     }

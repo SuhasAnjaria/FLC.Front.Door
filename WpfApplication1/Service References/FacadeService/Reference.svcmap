@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="376fdbb6-3eb0-4f96-acb4-53d2af6573ac" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="23ad1f6f-bea4-4f05-b947-a6a052a47c9b" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -22,12 +22,12 @@
     <MetadataSource Address="http://flcChicago:8699/FacadeService/FacadeService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="FacadeService.xsd" MetadataType="Schema" ID="d5a41bd1-9d68-4249-a130-76c380c8294d" SourceId="1" SourceUrl="http://flcchicago:8699/FacadeService/FacadeService.svc?xsd=xsd3" />
-    <MetadataFile FileName="FacadeService1.xsd" MetadataType="Schema" ID="61c28749-5cce-4a61-b57f-d996556f8eac" SourceId="1" SourceUrl="http://flcchicago:8699/FacadeService/FacadeService.svc?xsd=xsd0" />
-    <MetadataFile FileName="FacadeService.disco" MetadataType="Disco" ID="56463f4b-d2ba-4830-b89f-5b3dfa724aba" SourceId="1" SourceUrl="http://flcchicago:8699/FacadeService/FacadeService.svc?disco" />
-    <MetadataFile FileName="FacadeService2.xsd" MetadataType="Schema" ID="a5083d0d-066e-46c7-8685-f2da78478219" SourceId="1" SourceUrl="http://flcchicago:8699/FacadeService/FacadeService.svc?xsd=xsd1" />
-    <MetadataFile FileName="FacadeService.wsdl" MetadataType="Wsdl" ID="b279c92e-efc0-4768-a1dc-3f2b1220d269" SourceId="1" SourceUrl="http://flcchicago:8699/FacadeService/FacadeService.svc?wsdl" />
-    <MetadataFile FileName="FacadeService3.xsd" MetadataType="Schema" ID="0b56d54b-e752-4f97-8e7e-a3518d49aa95" SourceId="1" SourceUrl="http://flcchicago:8699/FacadeService/FacadeService.svc?xsd=xsd2" />
+    <MetadataFile FileName="FacadeService.xsd" MetadataType="Schema" ID="f8a2d1c2-6f5e-4a71-9b7d-50aada44f921" SourceId="1" SourceUrl="http://flcchicago:8699/FacadeService/FacadeService.svc?xsd=xsd3" />
+    <MetadataFile FileName="FacadeService1.xsd" MetadataType="Schema" ID="11f32abd-f2c1-4167-b44e-6c828dbbbce4" SourceId="1" SourceUrl="http://flcchicago:8699/FacadeService/FacadeService.svc?xsd=xsd0" />
+    <MetadataFile FileName="FacadeService.disco" MetadataType="Disco" ID="f5248e8d-3f73-4b00-9907-95e19c7c7ad3" SourceId="1" SourceUrl="http://flcchicago:8699/FacadeService/FacadeService.svc?disco" />
+    <MetadataFile FileName="FacadeService2.xsd" MetadataType="Schema" ID="b0bdac67-eb19-4f10-81da-0644316ced8d" SourceId="1" SourceUrl="http://flcchicago:8699/FacadeService/FacadeService.svc?xsd=xsd1" />
+    <MetadataFile FileName="FacadeService.wsdl" MetadataType="Wsdl" ID="d114d449-e54f-42db-876f-3f71bc810155" SourceId="1" SourceUrl="http://flcchicago:8699/FacadeService/FacadeService.svc?wsdl" />
+    <MetadataFile FileName="FacadeService3.xsd" MetadataType="Schema" ID="2f920e81-775d-43d0-bc83-c4de9d7331c4" SourceId="1" SourceUrl="http://flcchicago:8699/FacadeService/FacadeService.svc?xsd=xsd2" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

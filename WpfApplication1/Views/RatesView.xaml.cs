@@ -8,6 +8,8 @@ namespace flc.FrontDoor.Views
     using System.Windows.Controls;
     using System.Windows.Data;
     using System.ComponentModel;
+    using System.Threading.Tasks;
+    using System.Windows.Threading;
     using System.Windows.Controls.Primitives;
     using Framework.UI;
 /// <summary>
@@ -32,13 +34,26 @@ namespace flc.FrontDoor.Views
 
         private void DataGrid_CollectionChanged(object sender, EventArgs e)
         {
+            
             var a = sender as DataGrid;
+            a.Visibility = System.Windows.Visibility.Hidden;
+            var b = a.Columns;
+            foreach(var bo in b)
+            {
+                this.Dispatcher.BeginInvoke(new Action(()=>a.Columns.Remove(bo)));
+            }
+            bool exists = b.Count>0;
             var rows = a.ItemsSource.OfType<IDictionary<string, object>>();
             var columns = rows.SelectMany(d => d.Keys).Distinct(StringComparer.OrdinalIgnoreCase).AsParallel();
             int i = 0;
+            int colcount = 0;
+            //AddtoGrid(columns,a);
+           
             foreach (string text in columns)
             {
+                
 
+                {
                 var column = new DataGridTextColumn
                 {
                     Header = text,
@@ -56,11 +71,44 @@ namespace flc.FrontDoor.Views
                 {
                     this.Dispatcher.BeginInvoke(new Action(() => a.Columns.Add(column)));
                 }
-
+                colcount++;
+                }
             }
-            
+
+            a.Visibility = System.Windows.Visibility.Visible;
         }
-    
+
+        private void AddtoGrid(ParallelQuery<string> columns, DataGrid a)
+        {
+            object mutex = new object();
+            int i = 0;
+            int colcount = 0;
+             Parallel.ForEach(columns,(text)=>
+                 {
+                     var column = new DataGridTextColumn
+                {
+                    Header = text,
+                    MinWidth = 60,
+                    Width = DataGridLength.SizeToCells,
+                    Binding = new Binding(text)
+                    
+                };
+                if (i == 0 | i == 1)
+                {
+                    column.Visibility = System.Windows.Visibility.Hidden;
+                   lock(mutex){ i++;}
+                }
+                if (i != 0 && i != 1)
+                {
+                    a.Dispatcher.BeginInvoke(new Action(()=>a.Columns.Add(column)) );
+                    
+                }
+                lock(mutex){colcount++;}
+                });
+                 }            
+        
+
+       
         private void SelectSecurity(object sender, RoutedEventArgs e)
         {
             Security_Selection SelectSecurity = new Security_Selection()

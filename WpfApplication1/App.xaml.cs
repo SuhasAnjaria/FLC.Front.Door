@@ -9,6 +9,7 @@ namespace flc.FrontDoor
     using flc.FrontDoor.ViewModels;
     using flc.FrontDoor.Models;
     using Autofac;
+    
 /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
@@ -19,6 +20,8 @@ namespace flc.FrontDoor
         {
            
             InitializeComponent();
+            var temp = new ProductSearchViewModel();
+            temp = null;
             
         }
         protected override void OnStartup(StartupEventArgs e)

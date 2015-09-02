@@ -56,18 +56,17 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <asset:AutoCompleteSearch DataContext="{Binding SecuritySelectionViewModel, Source={StaticResource ViewModelLocator}}"
-                                  ItemsSource="{Binding SearchList}"
-                                  MinimumPrefixLength="2"
-                                  Margin="60,6,80,6" 
+        <asset:AutoCompleteSearch MinimumPopulateDelay="200"
+                                  MinimumPrefixLength="4"
+                                  MaxHeight="200"
+                                  MaxDropDownHeight="200"
+                                  Margin="10,6,10,6" 
                                   Grid.Column="1" Grid.Row="1"
                                   SelectionChanged="AutoBoxClick"
                                   ValueMemberPath="Name"
+                                 
                                   
-            x:Name="AutocompleteBox" 
-            
-           
-            >
+            x:Name="AutocompleteBox" >
 
             <asset:AutoCompleteSearch.ItemTemplate>
                 <DataTemplate>

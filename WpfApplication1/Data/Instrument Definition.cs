@@ -68,12 +68,15 @@ namespace flc.FrontDoor.Data
         JPY,
         AUD,
         SEK,
-        NOK
+        NOK,
+        GBP
     }
 
     public enum Features
     {
+        PayerPremium,
         Premium,
+        ReceiverPremium,
         Price,
         Value,
         Volatility,
@@ -107,8 +110,8 @@ namespace flc.FrontDoor.Data
         #region Fields
 
         // Fields...
-        private string _dqCode;
-        private string _bbgCode;
+        private List<string> _dqCode;
+        private List<string> _bbgCode;
         private List<Features> _features;
         private string _productType;
         private Currency _currency;
@@ -149,13 +152,13 @@ namespace flc.FrontDoor.Data
            set { this._features = value; }
        }
 
-       public string BbgCode
+       public List<string> BbgCode
        {
            get { return this._bbgCode; }
            set { this._bbgCode = value; }
        }
         
-        public string DqCode
+        public List<string> DqCode
         {
         	get {	return _dqCode; }
         	set { _dqCode = value;	}
@@ -193,7 +196,7 @@ namespace flc.FrontDoor.Data
                 case "Swap":
                     return new List<Features>(){ Features.Price, Features.Rate, Features.DVO1, };
                 case "Swaption":
-                    return new List<Features>(){ Features.Premium, Features.Rate, Features.Volatility, Features.DVO1, Features.Rate, Features.Gamma };
+                    return new List<Features>(){ Features.PayerPremium, Features.Rate, Features.Volatility, Features.DVO1, Features.Rate, Features.Gamma };
                 default:
                     return null;
             }

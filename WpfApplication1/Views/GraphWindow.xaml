@@ -1,0 +1,46 @@
+﻿<extra:Window x:Class="flc.FrontDoor.Views.GraphWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Height="768" Width="1200" WindowStartupLocation="CenterScreen" 
+         xmlns:extra="http://schemas.extra.com/ui" 
+        xmlns:params="http://schemas.codeplex.com/elysium/params" 
+        xmlns:metro="http://schemas.codeplex.com/elysium" 
+        xmlns:Assets="clr-namespace:flc.FrontDoor.Assets"
+        Title="FLC Chart"
+        Icon="{StaticResource Flc Icon}">
+    <Grid
+        Assets:GridHelpers.ColumnCount="5"
+        Assets:GridHelpers.RowCount="5"
+        Assets:GridHelpers.StarRows="1"
+        Assets:GridHelpers.StarColumns="1">
+        <Separator Grid.Row="1" Grid.ColumnSpan="5" Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}" VerticalAlignment="Top" Panel.ZIndex="2" Opacity="0.5"/>
+        <extra:AnimatedWrapPanel Grid.Row="1">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem  Header="_File" Width="49" HorizontalContentAlignment="Center" FontStretch="Expanded"  FontSize="14">
+                    <MenuItem Style="{StaticResource ExportMenuItemStyle}">
+                        <MenuItem Style="{StaticResource ExportCsvMenuItemStyle}"/>
+                        <MenuItem Style="{StaticResource PdfMenuItemStyle}"/>
+                    </MenuItem>
+                    <MenuItem Style="{StaticResource SaveMenuItemStyle}">
+                        <MenuItem Style="{StaticResource SaveMenuItemStyle}"/>
+                        <MenuItem Style="{StaticResource SaveAsMenuItemStyle}"/>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="_Edit" Width="49" HorizontalContentAlignment="Center" FontStretch="Expanded"  FontSize="14">
+                    <MenuItem Style="{StaticResource SettingsMenuItemStyle}"/>
+                </MenuItem>
+                <MenuItem Header="_Help" Width="49" HorizontalContentAlignment="Center" FontStretch="Expanded"  FontSize="14">
+                    <MenuItem Style="{StaticResource HelpMenuItemStyle}"/>
+                    <MenuItem Header="Update" />
+
+
+
+                </MenuItem>
+            </Menu>
+
+        </extra:AnimatedWrapPanel>
+
+    </Grid>
+    
+  
+</extra:Window>

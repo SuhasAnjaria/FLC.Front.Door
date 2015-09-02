@@ -10,9 +10,11 @@
     using GalaSoft.MvvmLight.Command;
     using System.Collections.ObjectModel;
     using System.Windows.Controls.Primitives;
+    using Framework.UI;
+    using flc.FrontDoor;
     using Autofac;
 
- public class RatesViewModel : BaseViewModel
+    public class RatesViewModel : BaseViewModel
     {
 
         public delegate void NewHandled(RatesViewModel sender, GridEventArgs e);
@@ -22,7 +24,8 @@
         private RelayCommand<object> _productSelectedCommand;
         private RelayCommand<object> _attributeSelectedCommand;
         private RelayCommand<object> _gridSelectionChangedCommand;
-        
+        private RelayCommand _refreshCommand;
+
         public RelayCommand<object> ProductSelectedCommand
         {
             get
@@ -66,6 +69,20 @@
                 return this._gridSelectionChangedCommand;
             }
         }
+        public RelayCommand RefreshGridCommand
+        {
+            get
+            {
+                if (this._refreshCommand == null)
+                {
+                    this._refreshCommand = new RelayCommand(RefreshGrid);
+                    return this._refreshCommand;
+                }
+
+                return this._refreshCommand;
+            }
+        }
+
 
         // Fields...
 
@@ -89,7 +106,7 @@
             if (obj != null)
             {
                 Feature = obj.ToString();
-                this.DoesGridDisplay = true;
+
 
             }
         }
@@ -97,23 +114,39 @@
         {
             if (obj != null)
             {
-                
+
                 Instrument = (Instrument)obj;
                 GridDataAdded(this, new GridEventArgs(this.Instrument.Currency.ToString(),
-                    this.Instrument.Underlying, this.Feature, this.Date));
+                                        this.Instrument.ProductType,
+                                        this.Instrument.Underlying,
+                                        this.Feature,
+                                        this.Date));
             }
         }
-        
+
+        private void RefreshGrid()
+        {
+            if (this.Instrument.Name != null)
+            {
+                
+                GridDataAdded(this, new GridEventArgs(this.Instrument.Currency.ToString(),
+                                   this.Instrument.ProductType,
+                                   this.Instrument.Underlying,
+                                   this.Feature,
+                                   this.Date));
+            }
+
+        }
         private void GridChanged(object obj)
         {
             TypeSwitch.Do(obj,
                 TypeSwitch.Case<string>((x) =>
                 {
-                   //TODO:
+                    //TODO:
                 }),
-                TypeSwitch.Case<DataGridColumnHeader>(x=>
+                TypeSwitch.Case<DataGridColumnHeader>(x =>
                 {
-                   //TODO:
+                    //TODO:
                 }));
         }
         public bool DoesGridDisplay
@@ -138,11 +171,9 @@
         {
             var A = Models.ModelBuilder.ModelContainer.Resolve<RatesMatrixModel>();
             this.GridDataAdded += A.RatesViewModel_GridDataAdded;
-
-            this.Date = DateTime.Today;
-          
             
 
+            this.Date = DateTime.Today;
 
         }
 
@@ -152,15 +183,17 @@
             public string Currency { get; set; }
             public DateTime Date { get; set; }
             public string Feature { get; set; }
+            public string ProductType { get; set; }
             /// <summary>
             /// Initializes a new instance of the GridEventArgs class.
             /// </summary>
-            public GridEventArgs(string currency,string underlying, string feature, DateTime date)
+            public GridEventArgs(string currency, string producttype, string underlying, string feature, DateTime date)
             {
                 Currency = currency;
                 Underlying = underlying;
                 Date = date;
                 Feature = feature;
+                ProductType = producttype;
             }
         }
 

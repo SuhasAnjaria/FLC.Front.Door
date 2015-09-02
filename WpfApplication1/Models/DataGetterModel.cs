@@ -27,38 +27,49 @@ namespace flc.FrontDoor.Models
                 using (FacadeServiceClient session = new FacadeServiceClient())
                 {
                     InstrumentDTO[] tickers = (InstrumentDTO[])session.GetInstruments();
-
-                    TextInfo myTI = new CultureInfo("en-US", false).TextInfo;
                     var _Action = new Action<InstrumentDTO>((o) => DoSomething(o));
                     Parallel.ForEach(tickers, _Action);
-
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                Console.WriteLine(ex);
+               
             }
 
             return InstrumentMaster;
         }
         private void DoSomething(InstrumentDTO ticker)
         {
-            lock (this.InstrumentMaster)
+            
             {
                 
                 var A = new Instrument
                 {
                     Name = ticker.FLCTicker,
+                    
                     AssetType = (AssetType)Enum.Parse(typeof(AssetType), ticker.AssetType, true),
                     ProductType = ticker.ProductType,
                     Currency = (Currency)Enum.Parse(typeof(Currency), ticker.Currency, true),
-                   // BbgCode = ticker.BloombergTicker,
-                    //DqCode = ticker.DataQueryTicker,
+                    BbgCode = ticker.BloombergTickers.ToList(),
+                    DqCode = ticker.DataQueryTickers.ToList(),
                     Underlying =ticker.Underlying,
                     AvailableFeatures = ticker.Fields.Select(c => (Features)Enum.Parse(typeof(Features), c, true)).ToList()
 
+
                 };
-                this.InstrumentMaster.Add(A);
+                if (A.Name.Contains("USD.Swap.Libor3m"))
+                {
+                 if(A.AvailableFeatures.Count>1)
+                 {
+                     int j;
+                 }
+                }
+
+                lock (this.InstrumentMaster)
+                {
+                    this.InstrumentMaster.Add(A);
+          
+                }
             }
         }
 

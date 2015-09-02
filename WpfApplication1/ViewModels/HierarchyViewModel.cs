@@ -39,15 +39,15 @@ using System.Globalization;
 
         public static List<Instrument> products = new List<Instrument>();
         public IEnumerable<CurrencyViewModel> Currencies { get; set; }
-        public  HierarchyViewModel()
+        public HierarchyViewModel()
         {
             //Products = products;
-        
-            using(var scope = ModelBuilder.ModelContainer.BeginLifetimeScope())
+
+            using (var scope = ModelBuilder.ModelContainer.BeginLifetimeScope())
             {
                 var a = scope.Resolve<Instrumentlist>();
                 var b = a.InstrumentMaster;
-                foreach(var m in b)
+                foreach (var m in b)
                 {
                     if (m.Underlying != "(NA)")
                     {
@@ -63,41 +63,9 @@ using System.Globalization;
                     new CurrencyViewModel(group.Key, group.Select(prod => prod).ToArray()
                         )
                         ).ToArray();
-            
-            
         }
 
-         public  HierarchyViewModel(int a)
-        {
-            using (FacadeServiceClient session = new FacadeServiceClient())
-            {
-                InstrumentDTO[] tickers = session.GetInstruments();
-                
-                TextInfo myTI = new CultureInfo("en-US", false).TextInfo;
-                var _Action = new Action<InstrumentDTO> ((o)=>DoSomething(o));
-                Parallel.ForEach(tickers,_Action);
-                //foreach(InstrumentDTO ticker in tickers)
-                //{
-                //    
-                //    var A = new Instrument
-                //    {
-                //        Name = ticker.FLCTicker,
-                //        AssetType = (AssetType)Enum.Parse(typeof(AssetType), ticker.AssetType, true),
-                //        ProductType = myTI.ToTitleCase(ticker.ProductType),
-                //        Currency = (Currency)Enum.Parse(typeof(Currency), ticker.Currency, true),
-                //        BbgCode = ticker.BloombergTicker,
-                //        DqCode = ticker.DataQueryTicker,
-                //        AvailableFeatures = ticker.Fields.Select(c => (Features)Enum.Parse(typeof(Features), c, true)).ToList()
-
-                //    };
-                //    HierarchyViewModel.products.Add(A);
-
-                //}
-               
-            }
-        }
-
-            private static void DoSomething(flc.FrontDoor.FacadeService.InstrumentDTO ticker)
+        private static void DoSomething(flc.FrontDoor.FacadeService.InstrumentDTO ticker)
             {
                 lock (HierarchyViewModel.products)
                 {
@@ -143,12 +111,7 @@ using System.Globalization;
 
 
         }
-
-
-
-       
-
-        
+    
 
         	
     }

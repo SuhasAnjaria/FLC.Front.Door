@@ -52,6 +52,11 @@ namespace flc.FrontDoor.Views
 
         }
 
+        private void AutocompleteBox_Populating(object sender, PopulatingEventArgs e)
+        {
+
+        }
+
        
     }
 }

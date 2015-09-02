@@ -15,6 +15,7 @@
         <controls:SharedResourceDictionary Source="/Framework.UI;component/Themes/WPF/Controls/Expander.xaml"/>
         <controls:SharedResourceDictionary Source="/Framework.UI;component/Themes/ElysiumExtra/BorderFix.xaml"/>
         <controls:SharedResourceDictionary Source="/Framework.UI;component/Themes/WPF/Controls/MenuItem.xaml"/>
+        <controls:SharedResourceDictionary Source="/Framework.UI;component/Themes/WPF/Controls/TabItem.xaml"/>
         <ResourceDictionary Source="/Common/Listbox.xaml"/>
             
          
@@ -67,7 +68,97 @@
 
     </Style>
 
+    <Style x:Key="TimeSeriesCommandButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">
+        <Setter Property="Content" Value="{StaticResource GraphLineIconStyle}"/>
+        <Setter Property="ToolTip" Value="Add a TimeSeries"/>
+    </Style>
+    <Style x:Key="CurveCommandButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">
+        <Setter Property="Content" Value="{StaticResource VectorLineCurveIconStyle}"/>
+        <Setter Property="ToolTip" Value="Add a Curve"/>
+    </Style>
+    <Style x:Key="SubmitCommandButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">
+        <Setter Property="Content" Value="{StaticResource OkIconStyle}"/>
+        <Setter Property="ToolTip" Value="Submit"/>
+        <Setter Property="Foreground" Value="{StaticResource PositiveActionBrush}"/>
+    </Style>
 
-   
+    <Style x:Key="TextAnnotationButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">
+        <Setter Property="Content" Value="{StaticResource TextNormalIconStyle}"/>
+        <Setter Property="ToolTip" Value="Add Text"/>
+        <Setter Property="Foreground" Value="{StaticResource PositiveActionBrush}"/>
+    </Style>
+    
+    <Style x:Key="ArrowAnnotationButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">
+            <Setter Property="Content" Value="{StaticResource ArrowDownIconStyle}"/>
+        <Setter Property="ToolTip" Value="Add Arrowed Marker"/>
+    </Style>
 
+    <Style x:Key="VerticalMarkerAnnotationButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">
+        <Setter Property="Content" Value="{StaticResource DimensionArrowLineHeightIconStyle}"/>
+        <Setter Property="ToolTip" Value="Add Vertical Axis Marker"/>
+    </Style>
+    <Style x:Key="HorizontalMarkerAnnotationButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">
+        <Setter Property="Content" Value="{StaticResource DimensionArrowLineWidthIconStyle}"/>
+        <Setter Property="ToolTip" Value="Add Horizontal Axis Marker"/>
+    </Style>
+    
+    <Style x:Key="HorizontalThresholdAnnotationButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">
+        <Setter Property="Content" Value="{StaticResource TagLabelIconStyle}"/>
+        <Setter Property="ToolTip" Value="Add Axis Threshold"/>
+    </Style>
+    
+    <Style x:Key="BoxAnnotationButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">
+        <Setter Property="Content" Value="{StaticResource VectorRectangleIconStyle}"/>
+        <Setter Property="ToolTip" Value="Add Box"/>
+    </Style>
+    <Style x:Key="ImageExportButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">
+        <Setter Property="Content" Value="{StaticResource ImageExportIconStyle}"/>
+        <Setter Property="ToolTip" Value="Export Image"/>
+    </Style>
+    <Style x:Key="DeleteButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">
+        <Setter Property="Content" Value="{StaticResource Delete1IconStyle}"/>
+        <Setter Property="ToolTip" Value="Delete Annotation"/>
+    </Style>
+
+    <Style x:Key="CurveTabItemHeaderStyle" BasedOn="{StaticResource TabItemHeaderStyle}" TargetType="{x:Type ContentControl}">
+        <!-- <Setter Property="FontSize" Value="{Binding RelativeSource={RelativeSource Self},Path=(params:General.HeaderFontSize),Mode=OneWay}"/>-->
+      
+    </Style>
+
+    <Style x:Key="TabItemStyle" TargetType="{x:Type TabItem}" >
+        <Setter Property="Background" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabControl}},Path=Background,Mode=OneWay}" />
+        <Setter Property="BorderBrush" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabControl}},Path=BorderBrush,Mode=OneWay}" />
+        <Setter Property="BorderThickness" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabControl}},Path=BorderThickness,Mode=OneWay}" />
+        <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabControl}},Path=Foreground,Mode=OneWay}" />
+        <Setter Property="FontSize" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabControl}},Path=FontSize,Mode=OneWay}" />
+        <Setter Property="FontStretch" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabControl}},Path=FontStretch,Mode=OneWay}" />
+        <Setter Property="FontStyle" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabControl}},Path=FontStyle,Mode=OneWay}" />
+        <Setter Property="FontWeight" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabControl}},Path=FontWeight,Mode=OneWay}" />
+        <Setter Property="TextOptions.TextFormattingMode" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabControl}},Path=(TextOptions.TextFormattingMode),Mode=OneWay}" />
+        <Setter Property="TextOptions.TextRenderingMode" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabControl}},Path=(TextOptions.TextRenderingMode),Mode=OneWay}" />
+        <Setter Property="RenderOptions.ClearTypeHint" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabControl}},Path=(RenderOptions.ClearTypeHint),Mode=OneWay}" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource {x:Static SystemParameters.FocusVisualStyleKey}}"/>
+        <Setter Property="Focusable" Value="True" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        <Setter Property="Padding" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabControl}},Path=Padding,Mode=OneWay}" />
+        <Setter Property="params:TabItem.HeaderStyle" Value="{StaticResource CurveTabItemHeaderStyle}" />
+        <Setter Property="params:TabControl.IndicatorBrush" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type TabControl}},Path=(params:TabControl.IndicatorBrush)}" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TabItem}">
+                    <ContentControl x:Name="ContentHost" ContentControl.Content="{TemplateBinding HeaderedContentControl.Header}" TextOptions.TextFormattingMode="{TemplateBinding TextOptions.TextFormattingMode}" TextOptions.TextRenderingMode="{TemplateBinding TextOptions.TextRenderingMode}" RenderOptions.ClearTypeHint="{TemplateBinding RenderOptions.ClearTypeHint}" FrameworkElement.Style="{TemplateBinding params:TabItem.HeaderStyle}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <DataTrigger DataTrigger.Binding="{Binding RelativeSource={RelativeSource Self},Path=FontSize,Mode=OneWay,Converter={StaticResource IsGreaterThanConverter},ConverterParameter=18}">
+                <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+            </DataTrigger>
+            <Trigger Property="TabItem.IsSelected" Value="True">
+                <Setter Property="params:TabControl.IndicatorBrush" Value="{StaticResource AccentBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>

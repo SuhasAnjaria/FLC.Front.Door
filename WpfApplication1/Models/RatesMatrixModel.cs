@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 using System.Dynamic;
 using flc.FrontDoor.Data;
 using flc.FrontDoor.ViewModels;
 using flc.FrontDoor.FacadeService;
+using flc.FrontDoor;
+using Framework.UI;
 
 namespace flc.FrontDoor.Models
 {
-    
+
     class RatesMatrixModel
     {
-        string A = "-,1m,1y,0.2,2y,1.3|-,2m,1y,0.2,2y,1.3|-,3m,1y,0.2,2y,1.3|-,4m,1y,0.2,2y,1.3";
+        
         public string[] B = new string[]
              { 
             "|-,1m,1y,0.590260905959435,18m,0.255812086893749,2y,0.968009889311047,3y,0.170263786442071,4y,0.418368516373894,5y,0.148230220133066,6y,0.382669834485875,7y,0.72485341110629,8y,0.314245623363502,9y,0.967590768808966,10y,0.710708182820818,12y,0.693636370570779,15y,0.238261094197396,20y,0.301369765937273,25y,0.00488206479865183,30y,0.805764702100845"
@@ -59,26 +62,29 @@ namespace flc.FrontDoor.Models
             };
         string C;
         private RatesViewModel _ratesViewModel;
-        static RatesMatrixModel()
-        {
-             
-            
-        }
-
-        public  void RatesViewModel_GridDataAdded(RatesViewModel sender, flc.FrontDoor.ViewModels.RatesViewModel.GridEventArgs e)
+        
+        public void RatesViewModel_GridDataAdded(RatesViewModel sender, flc.FrontDoor.ViewModels.RatesViewModel.GridEventArgs e)
         {
             using (FacadeServiceClient session = new FacadeServiceClient())
             {
-                var A = session.GetRatesMatrix("USD", "Swap", "Libor3m", "Mid", new DateTime(2015, 7, 9));
+                try
+                {
 
-                C = String.Join("", A.DataRowList);
-                _ratesViewModel = sender;
-                _ratesViewModel.MatrixArgs = DynamoGenerator.GenerateDataGridObjects(C);
+                    var A = session.GetRatesMatrix(e.Currency, e.ProductType, e.Underlying, e.Feature, new DateTime(2015, 7, 9));
+
+                    C = String.Join("", A.DataRowList);
+
+                    _ratesViewModel = sender;
+                    _ratesViewModel.MatrixArgs = DynamoGenerator.GenerateDataGridObjects(C);
+
+                    ElysiumApplication.Current.MainWindow.Dispatcher.BeginInvoke((new Action(() => _ratesViewModel.DoesGridDisplay = true)));
+                }
+                catch (Exception ex)
+                {
+                   
+                }
             }
         }
     }
-
-
-    
 
 }
