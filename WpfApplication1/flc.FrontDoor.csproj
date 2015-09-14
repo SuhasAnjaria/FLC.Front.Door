@@ -149,6 +149,7 @@
     <Compile Include="Assets\EventHandlerGenerator.cs" />
     <Compile Include="Assets\Identities.cs" />
     <Compile Include="Assets\BCrypt.cs" />
+    <Compile Include="Assets\SciChartHelpers.cs" />
     <Compile Include="Assets\SimpleCommand.cs" />
     <Compile Include="Assets\TabViewPersistence.cs" />
     <Compile Include="Assets\TypeSwitch.cs" />
@@ -156,6 +157,8 @@
     <Compile Include="Common\AutocompleteBoxBehavior.cs" />
     <Compile Include="Common\Interface1.cs" />
     <Compile Include="Common\TextBlockBehaviour.cs" />
+    <Compile Include="Converters\BoolToValueConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\EnumToStringConverter.cs" />
     <Compile Include="Converters\GeneralMultiStringDisplayConverter.cs" />
     <Compile Include="Converters\StringToFeaturesConverter.cs" />
@@ -167,13 +170,15 @@
     <Compile Include="Models\Interfaces\IModelLocator.cs" />
     <Compile Include="Models\ModelLocator.cs" />
     <Compile Include="Models\RatesMatrixModel.cs" />
+    <Compile Include="Data\ChartDataTypes.cs" />
+    <Compile Include="NonDBData\RandomWalkGenerator.cs" />
     <Compile Include="Service References\FacadeService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\MainChartViewModel.cs" />
     <Compile Include="ViewModels\ProductSearchViewModel.cs" />
-    <Compile Include="Data\Datatypes.cs" />
     <Compile Include="Data\Instrument Definition.cs" />
     <Compile Include="ViewModels\HierarchyViewModel.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -351,6 +356,7 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

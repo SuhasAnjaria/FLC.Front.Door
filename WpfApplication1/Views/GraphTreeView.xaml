@@ -7,7 +7,8 @@
     xmlns:extra="http://schemas.extra.com/ui" 
     xmlns:params="http://schemas.codeplex.com/elysium/params" 
     xmlns:metro="http://schemas.codeplex.com/elysium" 
-    xmlns:xy="clr-namespace:flc.FrontDoor.Data" 
+    xmlns:xy="clr-namespace:flc.FrontDoor.Data"
+    xmlns:viewModels="clr-namespace:flc.FrontDoor.ViewModels"
     mc:Ignorable="d" 
     Height="300" 
     Width="250">
@@ -27,7 +28,7 @@
                     <TreeView.Resources>
 
                         <HierarchicalDataTemplate 
-                            DataType="{x:Type xy:CurrencyViewModel}" 
+                            DataType="{x:Type viewModels:CurrencyViewModel}" 
                             ItemsSource="{Binding AssetTypes }">
                             
                                 <TextBlock 
@@ -39,7 +40,7 @@
                         </HierarchicalDataTemplate>
 
                         <HierarchicalDataTemplate 
-                            DataType="{x:Type xy:AssetTypeViewModel}" 
+                            DataType="{x:Type viewModels:AssetTypeViewModel}" 
                             ItemsSource="{Binding ProductType}">
 
                             <TextBlock 
@@ -50,7 +51,7 @@
 
                         </HierarchicalDataTemplate>
                         <HierarchicalDataTemplate 
-                            DataType="{x:Type xy:ProductTypeViewModel}" 
+                            DataType="{x:Type viewModels:ProductTypeViewModel}" 
                             ItemsSource="{Binding Underlyingsorted}" >
                             
                             <TextBlock Text="{Binding MyProductType}" SnapsToDevicePixels="True" Focusable="False" 
@@ -60,7 +61,7 @@
 
                         </HierarchicalDataTemplate>
                 <HierarchicalDataTemplate
-                    DataType="{x:Type xy:UnderlyingViewModel}">
+                    DataType="{x:Type viewModels:UnderlyingViewModel}">
                     <Button 
                         Focusable="False" MinWidth="100"
                         HorizontalContentAlignment="Center" VerticalContentAlignment="Center"

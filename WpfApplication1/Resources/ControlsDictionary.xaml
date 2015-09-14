@@ -86,6 +86,7 @@
         <Setter Property="Content" Value="{StaticResource TextNormalIconStyle}"/>
         <Setter Property="ToolTip" Value="Add Text"/>
         <Setter Property="Foreground" Value="{StaticResource PositiveActionBrush}"/>
+        
     </Style>
     
     <Style x:Key="ArrowAnnotationButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">

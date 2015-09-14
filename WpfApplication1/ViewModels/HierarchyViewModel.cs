@@ -1,25 +1,13 @@
-﻿
-namespace flc.FrontDoor.Data
-{
-    
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Framework.ComponentModel;
-using Framework.UI.Input;
-using Framework.IO;
-using System.Threading.Tasks;
-using System.Windows;
-using FrontDoor.ViewModels;
-using System.Windows.Data;
-using System.Windows.Documents;
-using FacadeService;
 using Autofac;
+using flc.FrontDoor.Data;
 using flc.FrontDoor.Models;
-using System.Globalization;
 
-     #region Hierarchy Transformation Model
+namespace flc.FrontDoor.ViewModels
+{
+
+    #region Hierarchy Transformation Model
  public class HierarchyViewModel : BaseViewModel
     {
     
@@ -47,12 +35,9 @@ using System.Globalization;
             {
                 var a = scope.Resolve<Instrumentlist>();
                 var b = a.InstrumentMaster;
-                foreach (var m in b)
+                foreach (var m in b.Where (m => m.Underlying != "(NA)"))
                 {
-                    if (m.Underlying != "(NA)")
-                    {
-                        this.Products.Add(m);
-                    }
+                    this.Products.Add(m);
                 }
             }
             Currencies = Products
@@ -64,32 +49,12 @@ using System.Globalization;
                         )
                         ).ToArray();
         }
-
-        private static void DoSomething(flc.FrontDoor.FacadeService.InstrumentDTO ticker)
-            {
-                lock (HierarchyViewModel.products)
-                {
-                    TextInfo myTI = new CultureInfo("en-US", false).TextInfo;
-                    var A = new Instrument
-                    {
-                        Name = ticker.FLCTicker,
-                        AssetType = (AssetType)Enum.Parse(typeof(AssetType), ticker.AssetType, true),
-                        ProductType = myTI.ToTitleCase(ticker.ProductType),
-                        Currency = (Currency)Enum.Parse(typeof(Currency), ticker.Currency, true),
-                       // BbgCode = ticker.BloombergTicker,
-                        //DqCode = ticker.DataQueryTicker,
-                        AvailableFeatures = ticker.Fields.Select(c => (Features)Enum.Parse(typeof(Features), c, true)).ToList()
-
-                    };
-                    HierarchyViewModel.products.Add(A);
-                }
-            }
     }
 
     public class CurrencyViewModel : BaseViewModel
     {
          
-        private Currency currency;
+        private Currency _currency;
         public IEnumerable<AssetTypeViewModel> AssetTypes { get; set; }
 
         public CurrencyViewModel(Currency currency, IEnumerable<Instrument> CurrencySorted)
@@ -105,9 +70,9 @@ using System.Globalization;
         }
         public Currency MyCurrency
         {
-            get { return this.currency; }
+            get { return this._currency; }
 
-            set { this.SetProperty(ref this.currency, value); }
+            set { this.SetProperty(ref this._currency, value); }
 
 
         }
@@ -119,7 +84,7 @@ using System.Globalization;
 
     public class AssetTypeViewModel : BaseViewModel
     {
-        private AssetType assettype;
+        private AssetType _assettype;
 
         public IEnumerable<ProductTypeViewModel> ProductType { get; set; }
 
@@ -137,9 +102,9 @@ using System.Globalization;
 
         public AssetType MyAssetType
         {
-            get { return this.assettype; }
+            get { return this._assettype; }
 
-            set { this.SetProperty(ref this.assettype, value); }
+            set { this.SetProperty(ref this._assettype, value); }
 
 
         }
@@ -149,7 +114,7 @@ using System.Globalization;
     {
       
         private  IEnumerable<UnderlyingViewModel> _underlyingsorted;
-        private string producttype;
+        private string _producttype;
   
 
 
@@ -171,8 +136,8 @@ using System.Globalization;
 
         public string MyProductType
         {
-            get { return this.producttype; }
-            set { this.SetProperty(ref this.producttype, value); }
+            get { return this._producttype; }
+            set { this.SetProperty(ref this._producttype, value); }
 
         }
 

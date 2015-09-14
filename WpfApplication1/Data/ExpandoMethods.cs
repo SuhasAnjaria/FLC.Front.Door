@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using MatrixLib.Matrix;
 using System.Dynamic;
-using System.Collections;
 
 namespace flc.FrontDoor.Data
 {
@@ -18,10 +12,10 @@ namespace flc.FrontDoor.Data
             string[] firstparse = input.Split('|');
             foreach (string row in firstparse)
             {
-                if (row == String.Empty) continue;
+                if (row == string.Empty) continue;
                 dynamic dynamo = new ExpandoObject();
                 string[] properties = row.Split(',');
-                var dictdynamo = dynamo as IDictionary<string, object>;
+                var dictdynamo = (IDictionary<string, object>) dynamo;
                 Queue<string> propertiesloaded = new Queue<string>();
                 foreach (string property in properties)
                 {
@@ -29,22 +23,22 @@ namespace flc.FrontDoor.Data
 
                 }
                 int i = 0;
-                while (!(propertiesloaded.Count == 0))
+                while (propertiesloaded.Count != 0)
                 {
-                    var Key = propertiesloaded.Dequeue();
-                    var Value = propertiesloaded.Dequeue();
+                    var key = propertiesloaded.Dequeue();
+                    var value = propertiesloaded.Dequeue();
                     if (i == 0)
                     {
-                        dynamo.RowHeader = Value;
+                        dynamo.RowHeader = value;
                         i++;
                     }
-                    if(Value.Length>4)
+                    if(value.Length>4)
                     {
-                        var A = double.Parse(Value);
-                        Value = A.ToString("f3");
+                        var A = double.Parse(value);
+                        value = A.ToString("f3");
 
                     }
-                    dictdynamo[Key] = Value;
+                    dictdynamo[key] = value;
 
                 }
 

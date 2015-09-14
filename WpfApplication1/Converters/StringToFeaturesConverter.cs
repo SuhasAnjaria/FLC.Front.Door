@@ -13,12 +13,13 @@ namespace flc.FrontDoor.Converters
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value != null)
+           /* if (value != null)
             {
                 var A = (string)value;
                 return (Features)Enum.Parse(typeof(Features), A, true);
             }
-            return null;
+            return null;*/
+            return value;
         }
 
         public object ConvertBack(object value, Type targetTypes, object parameter, System.Globalization.CultureInfo culture)
