@@ -159,7 +159,7 @@
     <Compile Include="Common\TextBlockBehaviour.cs" />
     <Compile Include="Converters\BoolToValueConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
-    <Compile Include="Converters\EnumToStringConverter.cs" />
+    <Compile Include="Converters\ChartTypeToBoolConverter.cs" />
     <Compile Include="Converters\GeneralMultiStringDisplayConverter.cs" />
     <Compile Include="Converters\StringToFeaturesConverter.cs" />
     <Compile Include="Converters\ProductSearchToSelectedProductConverter.cs" />
@@ -216,6 +216,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\RatesDataGridTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\SciChartStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -165,6 +166,95 @@ namespace flc.FrontDoor.Assets
             axis.Style = axisStyle;
             axis.DataContext = axisViewModel;
             return axis;
+        }
+    }
+
+    public class CurveLabelProvider : NumericLabelProvider
+    {
+        private readonly string[] _xaxislabels;
+
+        public CurveLabelProvider(string [] xaxislables)
+        {
+            _xaxislabels = xaxislables;
+
+        }
+
+        #region Overrides of ProviderBase
+
+        /// <summary>
+        /// Called when the provider instance is initialized as it is attached to the parent axis, with the parent axis instance
+        /// </summary>
+        /// <param name="parentAxis">The parent <see cref="T:Abt.Controls.SciChart.Visuals.Axes.IAxis"/> instance</param>
+        public override void Init (IAxis parentAxis)
+        {
+            base.Init (parentAxis);
+        }
+
+        #endregion
+
+        #region Overrides of LabelProviderBase
+
+        /// <summary>
+        /// Called at the start of an axis render pass, before any labels are formatted for the current draw operation
+        /// </summary>
+        public override void OnBeginAxisDraw()
+        {
+            base.OnBeginAxisDraw();
+        }
+
+        #endregion
+
+        #region Overrides of NumericLabelProvider
+
+        /// <summary>
+        /// Formats a label for the cursor, from the specified data-value passed in
+        /// </summary>
+        /// <param name="dataValue">The data-value to format</param>
+        /// <returns>
+        /// The formatted cursor label string
+        /// </returns>
+        public override string FormatCursorLabel (IComparable dataValue)
+        {
+            int index = (int) Convert.ChangeType (dataValue, typeof (int));
+            if (index >= 0 && index < _xaxislabels.Length)
+                return _xaxislabels[index];
+            return dataValue.ToString();
+        }
+
+        #endregion
+
+        #region Overrides of NumericLabelProvider
+
+        /// <summary>
+        /// Formats a label for the axis from the specified data-value passed in
+        /// </summary>
+        /// <param name="dataValue">The data-value to format</param>
+        /// <returns>
+        /// The formatted label string
+        /// </returns>
+        public override string FormatLabel (IComparable dataValue)
+        {
+            int index = (int)Convert.ChangeType(dataValue, typeof(int));
+            if (index >= 0 && index < _xaxislabels.Length)
+                return _xaxislabels[index];
+            return dataValue.ToString();
+        }
+
+        #endregion
+    }
+
+    public static class EumerableExtensions
+    {
+        public static IEnumerable<double> GetDoubleRange (this IEnumerable input)
+        {
+            var result = new List<double>();
+            int count = 1;
+            foreach (var temp in input)
+            {
+                result.Add (count);
+                count++;
+            }
+            return result;
         }
     }
 }

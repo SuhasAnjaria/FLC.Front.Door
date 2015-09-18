@@ -23,7 +23,7 @@
     </ResourceDictionary.MergedDictionaries>
     <converters:DateToTextConverter x:Key="DateToTextConverter"/>
     <converters:GeneralMultiStringDisplayConverter x:Key="GeneralMultiStringDisplayConverter"/>
-    <converters:EnumToStringConverter x:Key="EnumToStringConverter"/>
+    <converters:ChartTypeToBoolConverter x:Key="ChartTypeToBoolConverter"/>
     <converters:ProductSearchToSelectedProductConverter x:Key="ProductSearchToSelectedProductConverter"/>
     <converters:StringToFeaturesConverter x:Key="StringToFeaturesConverter"/>
     <BitmapImage x:Key="Flc Icon" UriSource="C:\MSMF\FL\lightning31.png"/>
@@ -105,7 +105,11 @@
     
     <Style x:Key="HorizontalThresholdAnnotationButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">
         <Setter Property="Content" Value="{StaticResource TagLabelIconStyle}"/>
-        <Setter Property="ToolTip" Value="Add Axis Threshold"/>
+        <Setter Property="ToolTip" Value="Add Horizontal Axis Threshold"/>
+    </Style>
+    <Style x:Key="VerticalThresholdAnnotationButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">
+        <Setter Property="Content" Value="{StaticResource TagLabelIconStyle}"/>
+        <Setter Property="ToolTip" Value="Add Vertical Axis Threshold"/>
     </Style>
     
     <Style x:Key="BoxAnnotationButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">
@@ -115,6 +119,10 @@
     <Style x:Key="ImageExportButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">
         <Setter Property="Content" Value="{StaticResource ImageExportIconStyle}"/>
         <Setter Property="ToolTip" Value="Export Image"/>
+    </Style>
+    <Style x:Key="ImageCopyButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">
+        <Setter Property="Content" Value="{StaticResource CopyIconStyle}"/>
+        <Setter Property="ToolTip" Value="Copy Image to Clipboard"/>
     </Style>
     <Style x:Key="DeleteButtonStyle" BasedOn="{StaticResource SmallIconCommandButtonStyle}" TargetType="{x:Type metro:CommandButton}">
         <Setter Property="Content" Value="{StaticResource Delete1IconStyle}"/>

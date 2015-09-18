@@ -11,6 +11,7 @@
     xmlns:viewsmodels="clr-namespace:flc.FrontDoor.ViewModels"
     xmlns:assets="clr-namespace:flc.FrontDoor.Assets"
     xmlns:sciChart="http://schemas.abtsoftware.co.uk/scichart"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
     Title="FLC Charts"
     Icon="{StaticResource Flc Icon}"
     Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"
@@ -26,6 +27,7 @@
             <Setter Property="VisibleRange" Value="{Binding VisibleRange, Mode=OneWay}"></Setter>
             <Setter Property="AxisTitle" Value="{Binding Title, Mode=TwoWay}"></Setter>
             <Setter Property="Id" Value="{Binding Id}"/>
+            <Setter Property="GrowBy" Value="0.1,0.1"/>
             <Setter Property="AutoRange" Value="{Binding AutoRange,Mode=OneWay}"></Setter>
             <Setter Property="AxisAlignment" Value="{Binding AxisAlignment, Mode=TwoWay, NotifyOnTargetUpdated=True,UpdateSourceTrigger=PropertyChanged}"></Setter>
             <Setter Property="DrawMajorGridLines" Value="False"/>
@@ -37,7 +39,7 @@
                 <Setter Property="CoordinateMode" Value="Relative"/>
                 <Setter Property="X1" Value="0.5"/>
                 <Setter Property="Y1" Value="0.5"/>
-                <Setter Property="Opacity" Value="0.5"/>
+                <Setter Property="Opacity" Value="0.8"/>
                 <Setter Property="HorizontalAlignment" Value="Stretch"/>
                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                <Setter Property="Text" Value="Click To Edit"/>
@@ -71,7 +73,62 @@
             <Setter Property="Opacity" Value="0.5"/>
             <Setter Property="IsSelected" Value="True"/>
         </Style>
+        <Style TargetType="sciChart:HorizontalLineAnnotation">
+            <Setter Property="CoordinateMode" Value="Relative"/>
+            <Setter Property="X1" Value="0.5"/>
+            <Setter Property="Y1" Value="0.5"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="IsEditable" Value="True"/>
+            <Setter  Property="Width" Value="2"/>
+            <Setter Property="Stroke" Value="#F6617F"/>
+            <Setter Property="LabelPlacement" Value="Axis"/>
+            <Setter Property="ShowLabel" Value="True"/>
+            <Setter Property="Opacity" Value="0.7"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Name, RelativeSource={RelativeSource Self}}" Value="HorizontalLineAnnotation" >
+                    <Setter Property="LabelValue" Value="Click To Edit"/>
+                    <Setter Property="LabelPlacement" Value="TopLeft"/>
+                    <Setter Property="HorizontalAlignment" Value="Right"/>
+                    <Setter Property="CanEditText" Value="True"/>
+                    <Setter Property="IsEditable" Value="True"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="sciChart:VerticalLineAnnotation">
+            <Setter Property="CoordinateMode" Value="Relative"/>
+            <Setter Property="X1" Value="0.5"/>
+            <Setter Property="Y1" Value="0.5"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="IsEditable" Value="True"/>
+            <Setter  Property="Width" Value="2"/>
+            <Setter Property="Opacity" Value="0.7"/>
+            <Setter Property="Stroke" Value="Crimson"/>
+            <Setter Property="LabelPlacement" Value="Auto"/>
+            <Setter Property="ShowLabel" Value="True"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Name, RelativeSource={RelativeSource Self}}" Value="VerticalMarkerAnnotation" >
+                <Setter Property="LabelValue" Value="Click To Edit"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Stroke" Value="BlueViolet"/>
+                <Setter Property="CanEditText" Value="True"/>
+                    <Setter Property="IsSelected" Value="True"/>
+                    <Setter Property="IsEditable" Value="True"/>
+                <Setter Property="StrokeThickness" Value="1"/>
+            </DataTrigger>
+            </Style.Triggers>
+        </Style>
         
+        <Style x:Name="SelectedSeriesStyle" TargetType="sciChart:BaseRenderableSeries">
+            <Setter Property="SeriesColor" Value="Black"/>
+            <Setter Property="PointMarkerTemplate">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <sciChart:EllipsePointMarker Fill="Black" Stroke="Black"/>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
     </extra:Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -123,16 +180,17 @@
                 <StackPanel Orientation="Horizontal"  Grid.Column="0">
 
                     <metro:CommandButton 
-                    Style="{StaticResource TimeSeriesCommandButtonStyle}" 
+                    Style="{StaticResource TimeSeriesCommandButtonStyle}" Tag ="TimeSeries" 
+                        Command="{Binding ChartIndicatorChangedCommand}" CommandParameter="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"
                     Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"
-                     />
+                   />
                     <metro:CommandButton 
-                    Style="{StaticResource CurveCommandButtonStyle}" 
+                    Style="{StaticResource CurveCommandButtonStyle}" Click="ButtonBase2_OnClick" Tag="Curve" Command="{Binding ChartIndicatorChangedCommand}" CommandParameter="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"
                     Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"/>
                     <WrapPanel  Margin="{Binding Converter={StaticResource DoubleToThicknessConverter},ConverterParameter='Top,Left,Right', RelativeSource={RelativeSource Self},Path=(params:General.BoldPaddingValue),Mode=OneWay}">
                         <TextBlock 
                         Margin="{Binding Converter={StaticResource DoubleToThicknessConverter},ConverterParameter='Top,Left,Right', RelativeSource={RelativeSource Self},Path=(params:General.BoldPaddingValue),Mode=OneWay}" 
-                        Text="{Binding Path=SelectedChartSeries, TargetNullValue='SelectedSeries', FallbackValue='Selected Series', UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                        Text="{Binding Path=SeriesName, TargetNullValue='SelectedSeries', FallbackValue='Selected Series', UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                         Style="{StaticResource NormalTextStyle}" VerticalAlignment="Center"/>
 
                         <DatePicker 
@@ -140,15 +198,21 @@
                         SelectedDateFormat="Short" 
                         Margin="{Binding Converter={StaticResource DoubleToThicknessConverter},ConverterParameter='Top,Bottom,Right', RelativeSource={RelativeSource Self},Path=(params:General.BoldPaddingValue),Mode=OneWay}" 
                         ToolTip="Start Date" 
-                        SelectedDate="{Binding StartDate}"/>
+                        SelectedDate="{Binding FromDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
                         <DatePicker 
                         Style="{StaticResource TransparentDatePickerStyle}" 
                         Margin="{Binding Converter={StaticResource DoubleToThicknessConverter},ConverterParameter='Top,Bottom,Right', RelativeSource={RelativeSource Self},Path=(params:General.BoldPaddingValue),Mode=OneWay}" 
                         SelectedDateFormat="Short" 
-                        ToolTip="End Date" 
-                        SelectedDate="{Binding EndDate}"/>
-                        <metro:CommandButton Style="{StaticResource SubmitCommandButtonStyle}"
-                            Margin="{Binding Converter={StaticResource DoubleToThicknessConverter},ConverterParameter='Top,Bottom,Right', RelativeSource={RelativeSource Self},Path=(params:General.BoldPaddingValue),Mode=OneWay}" Command="{Binding NewChartSubmitted}"/>
+                        ToolTip="End Date" DisplayDateEnd="{x:Static system:DateTime.Today}" IsEnabled="{Binding ChartIndicator, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource ChartTypeToBoolConverter}}"
+                        SelectedDate="{Binding ToDate, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}">
+                            
+                            </DatePicker>
+                        <metro:CommandButton Style="{StaticResource SubmitCommandButtonStyle}" x:Name="SubmitButton"
+                            Margin="{Binding Converter={StaticResource DoubleToThicknessConverter},ConverterParameter='Top,Bottom,Right', RelativeSource={RelativeSource Self},Path=(params:General.BoldPaddingValue),Mode=OneWay}"
+                                             Tag="{Binding ChartIndicator, UpdateSourceTrigger=PropertyChanged}"
+                                             Command="{Binding GetChartCommand}"/>
+                        
+                        
                         <Rectangle VerticalAlignment="Stretch" Fill="#908F8F" Width="1" Margin="{Binding Converter={StaticResource DoubleToThicknessConverter},ConverterParameter='Top,Bottom,Right', RelativeSource={RelativeSource Self},Path=(params:General.BoldPaddingValue),Mode=OneWay}"/>
                     </WrapPanel>
                     <WrapPanel x:Name="AnnotationCommandPanel">
@@ -177,16 +241,23 @@
                             Command="{Binding Path=AnnotationViewModel.AddAnnotationCommand}" CommandParameter="{Binding Path=Tag,RelativeSource={RelativeSource Self}}"
                     Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"/>
                         <metro:CommandButton 
+                    Style="{StaticResource VerticalThresholdAnnotationButtonStyle}" Tag="VerticalThreshold"
+                            Command="{Binding Path=AnnotationViewModel.AddAnnotationCommand}" CommandParameter="{Binding Path=Tag,RelativeSource={RelativeSource Self}}"
+                    Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"/>
+                        <metro:CommandButton 
                     Style="{StaticResource DeleteButtonStyle}" x:Name="DeleteButton" 
-                            
+                            Command="{Binding Path=AnnotationViewModel.DeleteAnnotationCommand}"
                     Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"/>
                         <Rectangle VerticalAlignment="Stretch" Fill="#908F8F" Width="1" Margin="{Binding Converter={StaticResource DoubleToThicknessConverter},ConverterParameter='Top,Bottom,Right', RelativeSource={RelativeSource Self},Path=(params:General.BoldPaddingValue),Mode=OneWay}"/>
                     </WrapPanel>
                     <WrapPanel x:Name="ActionCommandPanel">
                         <metro:CommandButton 
-                    Style="{StaticResource ImageExportButtonStyle}" 
+                    Style="{StaticResource ImageExportButtonStyle}" Click="SaveChartToFile"
                     Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"/>
-                       
+                      <metro:CommandButton
+                          Style="{StaticResource ImageCopyButtonStyle}"
+                          Margin="{Binding RelativeSource={RelativeSource Self}, Path=(params:General.BoldPadding), Mode=OneWay}"
+                          Click="CopySurfaceToClipboard"/> 
                     </WrapPanel>
                 </StackPanel>
             </Grid>
@@ -222,21 +293,27 @@
                     <sciChart:ModifierGroup>
                         <sciChart:RubberBandXyZoomModifier></sciChart:RubberBandXyZoomModifier>
                         <sciChart:ZoomExtentsModifier ExecuteOn="MouseDoubleClick"></sciChart:ZoomExtentsModifier>
+                        <sciChart:SeriesSelectionModifier SelectedSeriesStyle="{StaticResource SelectedSeriesStyle}"/>
                 </sciChart:ModifierGroup>
                 </sciChart:SciChartSurface.ChartModifier>
 
 
             </sciChart:SciChartSurface>
-            <sciChart:SciChartSurface x:Name="CurveChartSurface1" Grid.Row="2" Grid.Column="0" sciChart:ThemeManager.Theme="BrightSpark" HorizontalContentAlignment="Stretch" VerticalAlignment="Stretch"
+            <sciChart:SciChartSurface x:Name="CurveChartSurface1" Grid.Row="2" Grid.Column="0" DataContext="{Binding Cu1ViewModel}" sciChart:ThemeManager.Theme="BrightSpark" HorizontalContentAlignment="Stretch" VerticalAlignment="Stretch"
                                       Margin="{Binding Converter={StaticResource DoubleToThicknessConverter},ConverterParameter='Top,Left,Right', RelativeSource={RelativeSource Self},Path=(params:General.BoldPaddingValue),Mode=OneWay}" 
-                                     assets:YAxesCollectionBehaviour.AxisSource="{Binding Ts1ViewModel.YAxisCollection}"
-                                      assets:YAxesCollectionBehaviour.AxisStyle="{StaticResource GlobalAxisStyle}"
-                                       SeriesSource="{Binding Ts1ViewModel.ChartSeries}">
+                                     assets:YAxesCollectionBehaviour.AxisSource="{Binding YAxisCollection}"
+                                      assets:YAxesCollectionBehaviour.AxisStyle="{StaticResource GlobalAxisStyle}" Annotations="{Binding AnnotationViewModel.ChartAnnotations}"
+                                       SeriesSource="{Binding ChartSeries}" assets:Injector.PassSurfaceToViewModel="True">
                 <sciChart:SciChartSurface.XAxis>
-                    <sciChart:CategoryDateTimeAxis>
-
-                    </sciChart:CategoryDateTimeAxis>
+                    <sciChart:NumericAxis  LabelProvider="{Binding CurveLabels}" MajorDelta="2" MinorDelta="1" DrawMajorGridLines="False" />
                 </sciChart:SciChartSurface.XAxis>
+                <sciChart:SciChartSurface.ChartModifier>
+                    <sciChart:ModifierGroup>
+                        <sciChart:RolloverModifier/>
+                        <sciChart:ZoomExtentsModifier ExecuteOn="MouseDoubleClick"/>
+                      
+                        </sciChart:ModifierGroup>
+                    </sciChart:SciChartSurface.ChartModifier>
 
             </sciChart:SciChartSurface>
             <sciChart:SciChartSurface x:Name="SS" Grid.Row="1" Grid.Column="1" 

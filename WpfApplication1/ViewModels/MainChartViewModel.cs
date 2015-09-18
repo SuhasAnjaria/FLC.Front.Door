@@ -1,29 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Configuration;
-using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Security.RightsManagement;
-using System.Text;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Media;
 using Abt.Controls.SciChart;
-using GalaSoft.MvvmLight;
-using Abt.Controls.SciChart.ChartModifiers;
 using Abt.Controls.SciChart.Model.DataSeries;
 using Abt.Controls.SciChart.Visuals;
 using Abt.Controls.SciChart.Visuals.Annotations;
 using Abt.Controls.SciChart.Visuals.Axes;
+using Abt.Controls.SciChart.Visuals.PointMarkers;
 using Abt.Controls.SciChart.Visuals.RenderableSeries;
 using flc.FrontDoor.Assets;
 using flc.FrontDoor.NonDBData;
 using GalaSoft.MvvmLight.Command;
-
 
 namespace flc.FrontDoor.ViewModels
 {
@@ -37,6 +30,11 @@ namespace flc.FrontDoor.ViewModels
         private BaseChartViewModel _cu2ViewModel;
         private IChartDataService _datamanager;
         private IViewportManager _viewportManager;
+        private DateTime _fromdate;
+        private DateTime _todate;
+        private string _seriesname;
+        private string _chartindicator = "Curve";
+
 
         #endregion
 
@@ -71,7 +69,82 @@ namespace flc.FrontDoor.ViewModels
             get { return _viewportManager; }
             set { this.SetProperty (ref _viewportManager, value); }
         }
+
+        public string SeriesName
+        {
+            get { return this._seriesname; }
+            set { this.SetProperty (ref _seriesname, value); }
+        }
+
+        public string ChartIndicator
+        {
+            get { return this._chartindicator; }
+            set { this.SetProperty (ref _chartindicator, value); }
+        }
+
+        public DateTime FromDate
+        {
+            get { return this._fromdate; }
+            set { this.SetProperty (ref _fromdate, value); }
+        }
+
+        public DateTime ToDate
+        {
+            get { return this._todate; }
+            set { this.SetProperty (ref _todate, value); }
+        }
+
         #endregion
+
+        #region Command Implementations
+
+        public RelayCommand<string> ChartIndicatorChangedCommand
+        {
+            get
+            {
+                return new RelayCommand<string> ((value) =>
+                { this.ChartIndicator = value; });
+            }
+        }
+
+        public RelayCommand GetChartCommand
+        {
+            get
+            {
+                if (ChartIndicator == "TimeSeries")
+                {
+                    return new RelayCommand (GetTimeSeries);
+                }
+                else if (ChartIndicator == "Curve")
+                {
+                    return new RelayCommand (GetCurveSeries);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        private void GetCurveSeries()
+        {
+            var curveSeries = _datamanager.GetCurveSeries (SeriesName, FromDate, ToDate);
+            var chartlist = MakeCurveSeriesViewModel (curveSeries);
+            Cu1ViewModel.ChartSeries.Add (chartlist[0]);
+            Cu1ViewModel.ChartSeries.Add (chartlist[1]);
+        }
+
+        private void GetTimeSeries()
+        {
+            var timeSeries = _datamanager.GetTimeSeries (SeriesName, FromDate, ToDate);
+            Ts1ViewModel.ChartSeries.Add (MakeTimeSeriesViewModel (timeSeries));
+        }
+
+        #endregion
+
+
+
+        #region Chart Width Properties
 
         public string Row1Height { get; set; }
         public string Row2Height { get; set; }
@@ -79,79 +152,121 @@ namespace flc.FrontDoor.ViewModels
         public string Column1Width { get; set; }
         public string Column2Width { get; set; }
 
-        public MainChartViewModel()
-        {
-            
-        }
+        #endregion
+
+
 
         public MainChartViewModel (IChartDataService dataService)
-            
+
         {
-           ChartWidthsSetter.SetWidths(this,1);
-            Ts1ViewModel= new TimeSeriesViewModel();
+            this.SeriesName = "ABC";
+            this.ToDate = DateTime.Today;
+            this.FromDate = DateTime.Today.AddYears (-1);
+            ChartWidthsSetter.SetWidths (this, 2);
+            Ts1ViewModel = new TimeSeriesViewModel();
+            Ts2ViewModel = new TimeSeriesViewModel();
+            Cu1ViewModel = new CurveViewModel();
+            Cu2ViewModel = new CurveViewModel();
             _datamanager = dataService;
             _viewportManager = new FlcViewPortManager();
-
-
-
-
-            Ts1ViewModel.YAxisCollection.Add(new AxisViewModel()
-            {
-                AxisAlignment = AxisAlignment.Left,
-                Title = "TestYAxis",
-                VisibleRange = new DoubleRange(0, 10),
-                Id = "TestAxisID"
-
-            });
-            Ts1ViewModel.YAxisCollection.Add(new AxisViewModel()
-            {
-                AxisAlignment = AxisAlignment.Right,
-                Title = "TestYAxis",
-                VisibleRange = new DoubleRange(0, 10),
-                Id = "TestAxisIDSecondary"
-
-            });
-           
-            
-            Ts1ViewModel.ChartSeries.Add(new ChartSeriesViewModel(_datamanager.GetTimeSeriesdouble("fake", DateTime.Now, DateTime.Now), new FastLineRenderableSeries()
-            {
-                SeriesColor = Color.FromRgb(17, 172, 203) ,
-                YAxisId = this.Ts1ViewModel.YAxisCollection[0].Id 
-            }));
-            Ts1ViewModel.ChartSeries.Add(new ChartSeriesViewModel(_datamanager.GetTimeSeries("fake",DateTime.Now, DateTime.Now),new FastLineRenderableSeries()
-            {
-                SeriesColor = Color.FromArgb(231, 12, 138, 31),
-                YAxisId = this.Ts1ViewModel.YAxisCollection[1].Id 
-                
-
-               
-            }));
-   
-           
-            
+            GetTimeSeries();
+            GetCurveSeries();
         }
+
+        
+
+
+
+        #region Helper Functions
+
+        public ChartSeriesViewModel MakeTimeSeriesViewModel (IDataSeries dataSeries)
+        {
+
+            FastLineRenderableSeries a = new FastLineRenderableSeries
+            {
+                SeriesColor = DefaultChartTemplate.GetNextColor(),
+                YAxisId = this.Ts1ViewModel.YAxisCollection[0].Id,
+            };
+            return new ChartSeriesViewModel (dataSeries, a);
+        }
+
+        public List<ChartSeriesViewModel> MakeCurveSeriesViewModel (IDataSeries dataSeries)
+        {
+
+
+            var output = new List<ChartSeriesViewModel>();
+            FastLineRenderableSeries A = new FastLineRenderableSeries
+            {
+                SeriesColor = DefaultChartTemplate.GetNextColor(),
+                IsHitTestVisible = false,
+                YAxisId = Cu1ViewModel.YAxisCollection[0].Id
+            };
+            ChartSeriesViewModel temp = new ChartSeriesViewModel (dataSeries, A);
+            output.Add (temp);
+            XyScatterRenderableSeries B = new XyScatterRenderableSeries
+            {
+                SeriesColor = DefaultChartTemplate.GetNextColor(),
+                PointMarker = DefaultChartTemplate.GetNextPointMarker(),
+                YAxisId = this.Cu1ViewModel.YAxisCollection[0].Id
+            };
+            temp = new ChartSeriesViewModel (dataSeries, B);
+            output.Add (temp);
+            return output;
+        }
+
+        #endregion
+
     }
 
-    public class TimeSeriesViewModel : BaseChartViewModel,IInjectSciChartController
+    public class TimeSeriesViewModel : BaseChartViewModel
     {
         public TimeSeriesViewModel()
         {
                 ChartSeries = new ObservableCollection<IChartSeriesViewModel>();
                 YAxisCollection = new ObservableCollection<AxisViewModel>();
             AnnotationViewModel = new AnnotationViewModel(this);
+            YAxisCollection.Add(new AxisViewModel()
+            {
+                AxisAlignment = AxisAlignment.Left,
+                Title = "TestYAxis",
+                VisibleRange = new DoubleRange(0, 10),
+                Id = "PrimaryAxis"
+            });
             
         }
 
-        #region Implementation of IInjectSciChartController
-
-        public ISciChartController ParentSurface { get; set; }
-
-        #endregion
+       
     }
 
     public class CurveViewModel : BaseChartViewModel
     {
+        //TODO: Talk to Ahmad about default maturities
+        private readonly string[] initializer = new string [50];
+        
+        public ILabelProvider CurveLabels
+        {
+            get { return this._curvelabels; }
+            set { this.SetProperty (ref _curvelabels, value); }
+        }
 
+        public CurveViewModel()
+        {
+            ChartSeries = new ObservableCollection<IChartSeriesViewModel>();
+            YAxisCollection = new ObservableCollection<AxisViewModel>();
+            AnnotationViewModel = new AnnotationViewModel(this);
+            YAxisCollection.Add(new AxisViewModel()
+            {
+                AxisAlignment = AxisAlignment.Left,
+                Title = "TestYAxis",
+                VisibleRange = new DoubleRange(0, 10),
+                Id = "PrimaryAxis"
+            });
+            for (int i = 0; i <50;i++)
+            {
+                initializer[i] = String.Format ("Y{0}", i);
+            }
+            CurveLabels = new CurveLabelProvider(initializer);
+        }
     }
 
     public interface IChartViewModel
@@ -176,9 +291,10 @@ namespace flc.FrontDoor.ViewModels
 
     }
 
-    public abstract class BaseChartViewModel : BaseViewModel, IChartViewModel
+    public abstract class BaseChartViewModel : BaseViewModel, IChartViewModel,IInjectSciChartController
     {
-        
+        // ReSharper disable once InconsistentNaming
+        public ILabelProvider _curvelabels;
         public ObservableCollection<IChartSeriesViewModel> ChartSeries { get; set; }
 
         public bool IsParentSurfaceVisible { get; set; }
@@ -188,17 +304,14 @@ namespace flc.FrontDoor.ViewModels
         public ObservableCollection<LegendViewModel> ChartLegendViewModels { get; set; }
 
         public ObservableCollection<AxisViewModel> YAxisCollection { get; set; }
-        
-       
 
-
-       
+        public ISciChartController ParentSurface { get; set; }
     }
 
     public class AnnotationViewModel : BaseViewModel
     {
-     private readonly TimeSeriesViewModel _basechart;  
-        public AnnotationViewModel(TimeSeriesViewModel basechart)
+     private readonly BaseChartViewModel _basechart;  
+        public AnnotationViewModel(BaseChartViewModel basechart)
         {
             _basechart = basechart;
          ChartAnnotations = new AnnotationCollection();       
@@ -218,11 +331,34 @@ namespace flc.FrontDoor.ViewModels
             }
         }
 
+        public RelayCommand DeleteAnnotationCommand
+        {
+            get
+            {
+                return new RelayCommand(DeleteAnnotation);
+            }
+        }
+
+        private void DeleteAnnotation()
+        {
+            using (var ased = _basechart.ParentSurface.SuspendUpdates())
+            {
+                for (var count = ChartAnnotations.Count - 1; count >= 0; count--)
+                {
+                    if (ChartAnnotations.ElementAt(count).IsSelected)
+                    {
+                        ChartAnnotations.RemoveAt(count);
+                    }
+                }    
+            }
+            
+        }
+
         private void AddAnnotation (string type)
         {
            using (var ased= _basechart.ParentSurface.SuspendUpdates())
            {
-            Type a = AnnotationDict.AnnotationTypes[type];
+            Type a = DefaultChartTemplate.AnnotationTypes[type];
 
             if (a != null)
             {
@@ -232,7 +368,7 @@ namespace flc.FrontDoor.ViewModels
                 annotaion.CanEditText = true;
                 
                 annotaion.YAxisId = _basechart.YAxisCollection[0].Id;
-                
+                annotaion.Name = type; 
                 ChartAnnotations.Add (annotaion);
 
                 
@@ -298,6 +434,7 @@ namespace flc.FrontDoor.ViewModels
         IDataSeries GetTimeSeries (string seriesname, DateTime from, DateTime to);
         IDataSeries GetTimeSeriesdouble(string seriesname, DateTime from, DateTime to);
         IDataSeries GetCurveSeries (string seriesname, DateTime from, DateTime to);
+       
     }
     
     public class ChartDataService:IChartDataService
@@ -310,6 +447,11 @@ namespace flc.FrontDoor.ViewModels
         public IDataSeries GetCurveSeries(string seriesname, DateTime from, DateTime to)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<IDataSeries> GetAbc()
+        {
+            return null;
         }
 
 
@@ -344,10 +486,15 @@ namespace flc.FrontDoor.ViewModels
         {
             var b = new RandomWalkGenerator(2);
             var data = b.GetRandomCurveSeries();
-            var curve = new XyDataSeries<DateTime,double>();
-            curve.Append(data.TimeData,data.OpenData);
+            var curve = new XyDataSeries<double,double>();
+            
+            curve.Append(data.OpenData.GetDoubleRange()
+             
+            ,data.OpenData);
             return curve;
         }
+
+        
     }
 
     public class ChartWidthsSetter
@@ -420,20 +567,80 @@ namespace flc.FrontDoor.ViewModels
         }
     }
 
-    public class AnnotationDict
+    public class DefaultChartTemplate
     {
+        private static int _i =-1;
+        private static int _j = -1;
         public static Dictionary<string, Type> AnnotationTypes = new Dictionary<string, Type>()
         {
             {"TextAnnotation", typeof (TextAnnotation)},
             {"ArrowAnnotation", typeof (LineArrowAnnotation)},
             {"BoxAnnotation", typeof (BoxAnnotation)},
             {"HorizontalLineAnnotation", typeof (HorizontalLineAnnotation)},
-            {"VerticalMarkerAnnotation", typeof (VerticalLineAnnotation)},
-            {"HorizontalThreshold", typeof (HorizontalLineAnnotation)}
+           // {"VerticalMarkerAnnotation", typeof (VerticalLineAnnotation)},
+            {"HorizontalThreshold", typeof (HorizontalLineAnnotation)},
+            {"VerticalThreshold" ,typeof(VerticalLineAnnotation)}
         };
 
-        
-        
+        public static  List<Color> StandardColors = new List<Color>()
+        {
+            Color.FromArgb (231, 16, 201, 220),
+            Color.FromArgb(231, 12, 138, 31),
+            Color.FromArgb(183, 158, 0, 197),
+            Color.FromArgb(255, 240, 166, 15),
+            Color.FromArgb(231, 69, 13, 179),
+           Color.FromArgb(231, 220, 16, 16),
+           Color.FromArgb(231, 80, 253, 9),
+           Color.FromArgb(231, 25, 5, 245),
+           Color.FromArgb(231, 40, 131, 255),
+           Color.FromArgb(209, 87, 88, 91),
+           Color.FromArgb(255, 50, 198, 95)
+
+
+        }; 
+       
+        public static List<BasePointMarker> StandardPointMarkers = new List<BasePointMarker>
+        {
+            new CrossPointMarker(),
+            new EllipsePointMarker(),
+            new SquarePointMarker(),
+            new TrianglePointMarker(),
+            
+        }; 
+
+        public static Color GetNextColor()
+        {
+            if (_i <= StandardColors.Count - 1)
+            {
+                _i++;
+                return StandardColors[_i];
+                
+            }
+            else
+            {
+                _i = -1;
+                return StandardColors[_i++];
+            }
+        }
+
+        public static BasePointMarker GetNextPointMarker()
+        {
+            if (_j <= StandardPointMarkers.Count - 1)
+            {
+                _j++;
+                return StandardPointMarkers[_i];
+
+            }
+            else
+            {
+                _j = -1;
+                return StandardPointMarkers[_j++];
+            }
+        }
 
     }
+
+   
+
+    
 }

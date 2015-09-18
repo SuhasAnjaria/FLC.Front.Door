@@ -8,21 +8,19 @@ namespace flc.FrontDoor.Converters
     using System.Threading.Tasks;
     using System.Windows.Data;
 
-public class EnumToStringConverter:IValueConverter
+public class ChartTypeToBoolConverter:IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            try
-            
+            if ((string) value == "TimeSeries")
             {
-                string Converted = Enum.GetName((value.GetType()), value);
-                return Converted;
+                return true;
             }
-
-            catch (Exception ex)
+            else
             {
-         return string.Empty;
+                return false;   
             }
+             
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
