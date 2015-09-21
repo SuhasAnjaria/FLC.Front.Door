@@ -9,7 +9,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace flc.FrontDoor.Data
 {
-    public enum ProductBase
+   /* public enum ProductBase
     {
         [Display(Description="Interest Rate Swap")]
         InterstRateSwap
@@ -43,8 +43,9 @@ namespace flc.FrontDoor.Data
         Forward
         ,
 
-    }
+    }*/
 
+    
     public enum AssetType
     {
         Rates,

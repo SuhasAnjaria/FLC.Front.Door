@@ -178,6 +178,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\MainChartViewModel.cs" />
+    <Compile Include="ViewModels\PricerViewModel.cs" />
     <Compile Include="ViewModels\ProductSearchViewModel.cs" />
     <Compile Include="Data\Instrument Definition.cs" />
     <Compile Include="ViewModels\HierarchyViewModel.cs">
@@ -279,7 +280,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <Resource Include="Assets\Material-Design-Iconic-Font.ttf" />
@@ -360,7 +361,12 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\FLCIcon.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\lightning31.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

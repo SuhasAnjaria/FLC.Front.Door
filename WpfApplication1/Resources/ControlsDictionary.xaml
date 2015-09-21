@@ -5,6 +5,7 @@
     xmlns:params="http://schemas.codeplex.com/elysium/params" 
     xmlns:metro="http://schemas.codeplex.com/elysium"
     xmlns:converters="clr-namespace:flc.FrontDoor.Converters"
+    xmlns:props ="clr-namespace:flc.FrontDoor.Properties"
     xmlns:common="clr-namespace:flc.FrontDoor.Common">
 
     <ResourceDictionary.MergedDictionaries>
@@ -26,7 +27,7 @@
     <converters:ChartTypeToBoolConverter x:Key="ChartTypeToBoolConverter"/>
     <converters:ProductSearchToSelectedProductConverter x:Key="ProductSearchToSelectedProductConverter"/>
     <converters:StringToFeaturesConverter x:Key="StringToFeaturesConverter"/>
-    <BitmapImage x:Key="Flc Icon" UriSource="C:\MSMF\FL\lightning31.png"/>
+    <BitmapImage x:Key="Flc Icon" UriSource="FLCIcon.bmp"/>
     
     
     <Style x:Key="TreeViewTextStyle" BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">

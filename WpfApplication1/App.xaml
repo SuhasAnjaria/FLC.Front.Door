@@ -9,7 +9,7 @@
     xmlns:metro="http://schemas.codeplex.com/elysium" 
     xmlns:VM="clr-namespace:flc.FrontDoor"
     xmlns:VMS="clr-namespace:flc.FrontDoor.ViewModels"
-    StartupUri="\Views\ChartingTool.xaml" ShutdownMode="OnLastWindowClose"
+    StartupUri="\Views\FrontDoor.xaml" ShutdownMode="OnLastWindowClose"
     Theme = "Light">             
           
        
